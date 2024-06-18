@@ -101,7 +101,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@bitbucket.org:smurfs-software/seohub_entities_bundle.git"
+            "url": "git@bitbucket.org:tegtechnique/seo-entities.git"
         }
     ],
     "require-dev": {
