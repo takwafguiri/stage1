@@ -1,0 +1,53 @@
+{% extends 'layout/base.html.twig' %}
+{% import 'layout/macros/form_render.html.twig' as custom_form_render %}
+
+{% block body %}
+    <div class="card">
+                          {{ form_start(form) }}
+
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 d-flex justify-content-start">
+                            <h1 class="card-title">{% if isNew %}Add{% else %}Edit{% endif %} configuration</h1>
+                        </div>
+                      <div class="col-6 d-flex justify-content-end">
+                            <a href="{{ path('app_website_configuration_list') }}" class="btn btn-warning ml-2"><i class="fa fa-arrow-left" aria-hidden="true"></i> Return</a>
+                            <div class="ml-2"> 
+                                {{ form_row(form.isDeleted) }}
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="card-body">
+                        {% if app.flashes('error') %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ app.flashes('error')|first }}
+                            </div>
+                        {% endif %}
+                        <div>
+                                <div class="row justify-content-center">
+
+                                    {{ custom_form_render.row_text(form.tag, "col-md-7 col-12 mt-3") }}
+                                    {{ custom_form_render.row_text(form.description, "col-md-7 col-12 mt-3") }}
+                                    {{ custom_form_render.row_text(form.value, "col-md-7 col-12 mt-3") }}
+                                    {{ custom_form_render.row_select(form.defaultLoad, "col-md-7 col-12 mt-3") }}
+
+                                </div>
+                                      <hr/>
+                                <div class="row justify-content-end">
+                                    {{ custom_form_render.row_switch(form.isEnabled, 'd-flex justify-content-end') }}
+                                </div>
+    
+                            <div class="row justify-content-center mt-5">
+                                <button type="submit" class="btn btn-success col-md-2">{% if isNew %}Add{% else %}Edit{% endif %} configuration</button>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

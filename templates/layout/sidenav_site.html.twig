@@ -1,0 +1,66 @@
+{% set user_role = getUserRole() %}
+<ul class="sidebar-nav">
+    <li class="sidebar-header">
+        Dashboard
+    </li>
+    <li class="sidebar-item {% if "app_dashboard" in app.request.attributes.get('_route') %} active {% endif %}">
+        <a class="sidebar-link" href="{{ path('app_dashboard') }}">
+            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+        </a>
+    </li>
+    <li class="sidebar-header">
+        Website management
+    </li>
+    {% if user_role in ["ROLE_SEO", "ROLE_CONTENT_MANAGER", "ROLE_ADMIN"] %}
+        <li class="sidebar-item {% if "app_page_" in app.request.attributes.get('_route') %} active {% endif %}">
+            <a class="sidebar-link" href="{{ path('app_page_list') }}">
+                <i class="align-middle" data-feather="layout"></i> <span class="align-middle">Pages</span>
+            </a>
+        </li>
+        <li class="sidebar-item {% if "app_category_" in app.request.attributes.get('_route') %} active {% endif %}">
+            <a class="sidebar-link" href="{{ path('app_category_list') }}">
+                <i class="fa-solid fa-box-open"></i> <span class="align-middle">Categories</span>
+            </a>
+        </li>
+
+    <li class="sidebar-item {% if "app_service_" in app.request.attributes.get('_route') %} active {% endif %}">
+        <a class="sidebar-link" href="{{ path('app_service_list') }}">
+            <i class="fa-regular fa-rectangle-list"></i> <span class="align-middle">Services</span>
+        </a>
+    </li>
+        <li class="sidebar-item {% if "app_file_" in app.request.attributes.get('_route') %} active {% endif %}">
+            <a class="sidebar-link" href="{{ path('app_file_index') }}">
+                <i class="align-middle" data-feather="file"></i> <span class="align-middle">Files</span>
+            </a>
+        </li>
+        <li class="sidebar-item {% if "app_component_" in app.request.attributes.get('_route') %} active {% endif %}">
+            <a class="sidebar-link" href="{{ path('app_component_list') }}">
+                <i class="fa-solid fa-code"></i> <span class="align-middle">Component</span>
+            </a>
+        </li>
+
+        <li class="sidebar-item {% if "app_website_configuration_" in app.request.attributes.get('_route') %} active {% endif %}">
+            <a class="sidebar-link" href="{{ path('app_website_configuration_list') }}">
+                <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Configurations</span>
+            </a>
+        </li>
+    {% endif %}
+
+    {% if user_role in ["ROLE_COMMERCIAL", "ROLE_COMMERCIAL_MANAGER","ROLE_ADMIN"] %}
+        <li class="sidebar-item {% if "app_prospects_" in app.request.attributes.get('_route') %} active {% endif %}">
+            <a class="sidebar-link" href="{{ path('app_prospects_list') }}">
+                <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Prospects</span>
+            </a>
+        </li>
+        <li class="sidebar-item {% if "app_status_" in app.request.attributes.get('_route') %} active {% endif %}">
+            <a class="sidebar-link" href="{{ path('app_status_list') }}">
+                <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Status</span>
+            </a>
+        </li>
+        <li class="sidebar-item {% if "app_clients°" in app.request.attributes.get('_route') %} active {% endif %}">
+            <a class="sidebar-link" href="{{ path('app_customers_list') }}">
+                <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Customers</span>
+            </a>
+        </li>
+    {% endif %}
+</ul>

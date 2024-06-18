@@ -1,0 +1,148 @@
+{% extends 'layout/base.html.twig' %}
+
+
+
+
+{% block body %}
+
+    <div class="card">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="card-body">
+                    <h1 class="card-title">
+                        Categories list
+                    </h1>
+                    <hr/>
+                    <div class="card-body">
+                        <div class="row justify-content-end">
+                        </div>
+                        <div class="row">
+                            <table class="table table-xs" id="table">
+                                <thead class="table-primary"></thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+
+<script>
+
+
+    const columns = [
+    {
+        title: 'ID',
+        field: 't_id',
+        visible: true,
+        align: "center",
+        sortName: 't.id',
+        halign: "center"
+    },
+       {
+        title: 'Display name',
+        field: 't_label',
+        sortable: true,
+        sortName: 't.label',
+        halign: "center"
+    },
+  
+       {
+        title: 'Category',
+        field: 'websiteCategory_tag',
+        sortable: true,
+        sortName: 'websiteCategory.tag',
+        halign: "center",
+    },
+  
+     
+    {
+        title: 'Description',
+        field: 't_description',
+        sortable: true,
+        sortName: 't.description',
+        halign: "center"
+    },
+     {
+                title: 'Status',
+                field: 't_isEnabled',
+                sortable: true,
+                sortName: 't.isEnable',
+                align: "center",
+                halign: "center",
+                formatter: function (value, row) {
+                    if (value)
+                        return "<span class='badge badge-success'>Enabled</span>";
+
+                    return "<span class='badge badge-danger'>Disabled</span>";
+                }
+            },   
+    {
+        title: 'Action',
+        field: 't_id',
+        sortable: false,
+        align: "center",
+        sortName: 't.lastName',
+        halign: "center",
+        formatter: function (data, row, index) {
+            let ch = '<a href="' + Routing.generate('app_category_edit', {websiteCategory: data}) + '" target="" class="btn btn-primary btn-sm" ><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+            return ch;
+        }},
+    ];
+
+    $(document).ready(function () {
+        const $table = $('#table');
+
+        $table.bootstrapTable({
+            toggle: "table",
+            url: Routing.generate('app_category_list'),
+            sidePagination: "server",
+            loadingFontSize: '14px',
+            visibleSearch: true,
+            buttons: {
+                btnAddUser: {
+                    text: 'Add user',
+                    icon: 'fa fa-circle-plus',
+                    html: '<a href="{{ path('app_category_new') }}" class="btn btn-success ml-2"><i class="fa  fa-circle-plus" aria-hidden="true"></i> Add category</a>'
+                }},
+            buttonsClass: '',
+            pageSize: 10,
+            pageList:[10, 25, 50, 100],
+            pagination: true,
+            paginationSuccessivelySize: 3,
+            paginationPagesBySide: 3,
+            paginationUseIntermediate: true,
+            paginationLoop: false,
+            paginationNextText: 'Next >',
+            paginationPreText: '< Prev',
+            sortName: "t.id",
+            sortOrder: "desc",
+            toolbar: "#toolbar",
+            filterControl: "true",
+            queryParams: function queryParams(params) {
+
+                    params.join = [
+                        {
+                            join: 't.parent',
+                            alias: 'websiteCategory',
+                            type: 'left',
+                            condition: 'websiteCategory.id = t.parent'
+                        },
+                        
+                    ];
+                params.columns = columns;
+                params.condition = [
+                    't.website = {{ app.session.get(constant('App\\Enum\\SessionKeys::SELECTED_SITE'))  }}'
+                    ];
+                return params
+            },
+            search: "true",
+            columns: columns,
+        })
+    });
+
+    </script>
+{% endblock %}

@@ -1,0 +1,175 @@
+{% macro row_text(form, classes) %}
+    <div class="{{ classes }} {% if form.vars.row_attr is defined and form.vars.row_attr.class is defined and form.vars.row_attr.class is not empty %}{{ form.vars.row_attr.class }}{% endif %}">
+        {% if form.vars.label_html %}
+            <label
+                    class="{% if form.vars.label_attr is defined and form.vars.label_attr.class is defined and form.vars.label_attr.class is not empty %}{{ form.vars.label_attr.class }}{% endif %}"
+                    for="{{ form.vars.id }}"
+            >
+                {{ form.vars.label }}
+
+            </label>
+        {% endif %}
+        {{ form_widget(form, {
+            'attr': {
+                'class': form.vars.attr.class is defined ? form.vars.attr.class ~ (form.vars.errors|length > 0 ? ' is-invalid' : '') : (form.vars.errors|length > 0 ? 'is-invalid' : '')
+            }
+        }) }}
+
+
+        {% if form.vars.errors|length > 0 %}
+            <div class="text-danger invalid-feedback">
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro row_password(form, classes) %}
+    <div class="{{ classes }} {% if form.vars.row_attr is defined and form.vars.row_attr.class is defined and form.vars.row_attr.class is not empty %}{{ form.vars.row_attr.class }}{% endif %}">
+        {% if form.vars.label_html %}
+            <label
+                    class="{% if form.vars.label_attr is defined and form.vars.label_attr.class is defined and form.vars.label_attr.class is not empty %}{{ form.vars.label_attr.class }}{% endif %}"
+                    for="{{ form.vars.id }}"
+            >
+                {{ form.vars.label }}
+
+            </label>
+        {% endif %}
+        {{ form_widget(form, {'attr': {'class': form.vars.attr.class ~ (form.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+
+        {% if form.vars.errors|length > 0 %}
+            <div class="text-danger invalid-feedback">
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro row_select(form, classes) %}
+    <div class="{{ classes }} {% if form.vars.row_attr is defined and form.vars.row_attr.class is defined and form.vars.row_attr.class is not empty %}{{ form.vars.row_attr.class }}{% endif %}">
+        {% if form.vars.label_html %}
+            <label
+                    class="{% if form.vars.label_attr is defined and form.vars.label_attr.class is defined and form.vars.label_attr.class is not empty %}{{ form.vars.label_attr.class }}{% endif %}"
+                    for="{{ form.vars.id }}"
+            >
+                {{ form.vars.label }}
+
+            </label>
+        {% endif %}
+        {{ form_widget(form, {'attr': {'class': form.vars.attr.class ~ (form.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+
+        {% if form.vars.errors|length > 0 %}
+            <div class="text-danger invalid-feedback">
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro row_switch(form, classes) %}
+    <div class="{{ classes }} {% if form.vars.row_attr is defined and form.vars.row_attr.class is defined and form.vars.row_attr.class is not empty %}{{ form.vars.row_attr.class }}{% endif %}">
+        <div class="form-check form-switch">
+            {{ form_widget(form, {'attr': {'class': form.vars.attr.class ~ (form.vars.errors|length > 0 ? ' is-invalid ' : '')}}) }}
+            <label
+                    class="form-check-label {% if form.vars.label_attr is defined and form.vars.label_attr.class is defined and form.vars.label_attr.class is not empty %}{{ form.vars.label_attr.class }}{% endif %}"
+                    for="{{ form.vars.id }}">{{ form.vars.label }}
+            </label>
+            {% if form.vars.errors|length > 0 %}
+                <div class="text-danger invalid-feedback">
+                    {{ form_errors(form) }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endmacro %}
+
+
+{% macro row_upload_image(form, classes, src) %}
+    <div class="{{ classes }} {% if form.vars.row_attr is defined and form.vars.row_attr.class is defined and form.vars.row_attr.class is not empty %}{{ form.vars.row_attr.class }}{% endif %}">
+        <div class="form-check">
+            <div class="upload-box">
+                <div class="upload-container">
+                    <div class="upload-card">
+                        <div class="drop_box">
+                            <header>
+                                <h4>Select File</h4>
+                            </header>
+                            <div id="{{ form.vars.id }}-input" style="display:none;">
+                                {{ form_row(form) }}
+                            </div>
+                            <div class="image-input-preview-container" id="{{ form.vars.id }}-preview-container"
+                                 {% if src == "" %}style="display: none" {% endif %}>
+                                <img class="image-file-preview" id="{{ form.vars.id }}-file-preview" src="{{ src }}">
+                            </div>
+                            <button type="button" class="btn btn-primary mt-3" id="{{ form.vars.id }}-trigger">Choose File
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endmacro %}
+
+{% macro row_collection(form, label, attr) %}
+    <div class="form-group">
+        <label class="control-label">{{ label }}</label>
+        <div class="collection-fields">
+            {% for child in form %}
+                {{ form_widget(child, { 'attr': attr }) }}
+            {% endfor %}
+        </div>
+    </div>
+{% endmacro %}
+{% macro row_checkbox(form, classes, inlineMode = false) %}
+    <div class="{{ classes }} {% if form.vars.row_attr is defined and form.vars.row_attr.class is defined and form.vars.row_attr.class is not empty %}{{ form.vars.row_attr.class }}{% endif %}">
+        {% if inlineMode %}
+            <div class="form-check form-switch">
+                {{ form_widget(form, {
+                    'attr': {
+                        'class': form.vars.attr.class is defined ? form.vars.attr.class ~ (form.vars.errors|length > 0 ? ' is-invalid' : '') : (form.vars.errors|length > 0 ? 'is-invalid' : '')
+                    }
+                }) }}
+                {% if form.vars.label_html %}
+                    <label
+                            class="{% if form.vars.label_attr is defined and form.vars.label_attr.class is defined and form.vars.label_attr.class is not empty %}{{ form.vars.label_attr.class }}{% endif %}"
+                            for="{{ form.vars.id }}"
+                    >
+                        {{ form.vars.label }}
+
+                    </label>
+                {% endif %}
+            </div>
+        {% else %}
+            {% if form.vars.label_html %}
+                <label
+                        class="{% if form.vars.label_attr is defined and form.vars.label_attr.class is defined and form.vars.label_attr.class is not empty %}{{ form.vars.label_attr.class }}{% endif %}"
+                        for="{{ form.vars.id }}"
+                >
+                    {{ form.vars.label }}
+
+                </label>
+                <br>
+            {% endif %}
+            <div class="form-check form-switch">
+                {{ form_widget(form, {
+                    'attr': {
+                        'class': form.vars.attr.class is defined ? form.vars.attr.class ~ (form.vars.errors|length > 0 ? ' is-invalid' : '') : (form.vars.errors|length > 0 ? 'is-invalid' : '')
+                    }
+                }) }}
+            </div>
+        {% endif %}
+
+
+        {% if form.vars.errors|length > 0 %}
+            <div class="text-danger invalid-feedback">
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+
+

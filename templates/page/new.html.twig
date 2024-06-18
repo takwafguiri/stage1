@@ -1,0 +1,238 @@
+{% extends 'layout/base.html.twig' %}
+{% import 'layout/macros/form_render.html.twig' as custom_form_render %}
+
+{% block title %}Create/Edit Content{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 d-flex justify-content-start">
+                            <h1 class="card-title">
+                                {% if isNew %}Create new {% else %}Edit{% endif %} Page
+                            </h1>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end">
+                            <a href="{{ path('app_page_list') }}" class="btn btn-warning ml-2"><i
+                                        class="fa fa-arrow-left" aria-hidden="true"></i> Return</a>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        <div class="row">
+
+                            <div id="stepper1" class="bs-stepper">
+                                <div class="bs-stepper-header">
+                                    <div class="step" data-target="#menu-configuration">
+                                        <button type="button" class="btn step-trigger">
+                                            <span class="bs-stepper-circle">1</span>
+                                            <span class="bs-stepper-label">Menu configuration</span>
+                                        </button>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div class="step" data-target="#page-configuration">
+                                        <button type="button" class="btn step-trigger">
+                                            <span class="bs-stepper-circle">2</span>
+                                            <span class="bs-stepper-label">Page configuration</span>
+                                        </button>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div class="step" data-target="#page-content">
+                                        <button type="button" class="btn step-trigger">
+                                            <span class="bs-stepper-circle">3</span>
+                                            <span class="bs-stepper-label">Page content</span>
+                                        </button>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div class="step" data-target="#page-seo">
+                                        <button type="button" class="btn step-trigger">
+                                            <span class="bs-stepper-circle">4</span>
+                                            <span class="bs-stepper-label">SEO</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="bs-stepper-content">
+                                    <div id="menu-configuration" class="content p-0">
+                                 <div class="row">
+                                            <div class="col-8 p-0">
+                                                {{ custom_form_render.row_text(form.menuTitle, 'col-8 mt-3') }}
+                                            </div>
+                                            <div class="col-4 p-0">
+                                            </div>
+                                        </div>
+                                                 <div class="row">
+                                                {{ custom_form_render.row_checkbox(form.showInMenu, 'col-2 mt-3') }}
+                                                <div class="col-3 mt-3" style="display: none" id="{{ form.displayOrder.vars.id }}_row">
+                                                    {{ custom_form_render.row_text(form.displayOrder, 'col-12') }}
+                                                </div>
+                                          </div>
+
+
+                                        <div class="row mt-5 justify-content-end">
+                                            <div class="col-2 d-flex justify-content-end">
+                                                <button class="col-12 btn btn-primary next-step" >Next</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="page-configuration" class="content">
+                                        <div class="row">
+                                            <div class="row">
+                                                <div class="col-8 p-0">
+                                                    {{ custom_form_render.row_text(form.slug, 'col-4 mt-3') }}
+                                                    {{ custom_form_render.row_text(form.tabTitle, 'col-10 mt-3') }}
+                                                    {{ custom_form_render.row_text(form.pageTitle, 'col-10 mt-3') }}
+                                                </div>
+                                                <div class="col-4 p-0">
+                                                    <div class="row">
+                                                        {{ custom_form_render.row_checkbox(form.hasCoverImage, 'col-12 mt-3  justify-content-center d-flex', true) }}
+                                                    </div>
+                                                    <div class="row" style="display: none" id="{{ form.coverImage.vars.id }}_row">
+                                                        {{ custom_form_render.row_upload_image(form.coverImage, "col-12 mt-3", filePath) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-5 justify-content-end">
+                                            <div class="col-2 d-flex justify-content-end">
+                                                <button class="col-12 btn btn-warning prev-step" >previous</button>
+                                            </div>
+                                            <div class="col-2 d-flex justify-content-end">
+                                                <button class="col-12 btn btn-primary next-step" >Next</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="page-content" class="content p-0">
+                                        <div class="row">
+                                            <div class="row">
+                                                {{ custom_form_render.row_text(form.firstContent, 'col-7 mt-3') }}
+                                                {{ custom_form_render.row_text(form.rightContent, 'col-5 mt-3') }}
+                                                {{ custom_form_render.row_text(form.secondContent, 'col-12 mt-3') }}
+                                                {{ custom_form_render.row_text(form.thirdContent, 'col-12 mt-3') }}
+                                            </div>
+                                        </div>
+                                        <div class="row mt-5 justify-content-end">
+                                            <div class="col-2 d-flex justify-content-end">
+                                                <button class="col-12 btn btn-warning prev-step" >previous</button>
+                                            </div>
+                                            <div class="col-2 d-flex justify-content-end">
+                                                <button class="col-12 btn btn-primary next-step" >Next</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="page-seo" class="content">
+                                        <div class="row">
+                                            <div class="row mt-3">
+                                                {{ custom_form_render.row_text(form.metaTitle, 'col-12') }}
+                                                {{ custom_form_render.row_text(form.metaDescription, 'col-12') }}
+                                            </div>
+                                        </div>
+                                        <div class="row mt-5 justify-content-end">
+                                            <div class="col-2 d-flex justify-content-end">
+                                                <button class="col-12 btn btn-warning prev-step" >previous</button>
+                                            </div>
+                                            <div class="col-2 d-flex justify-content-end">
+                                                <button type="submit" class="col-12 btn btn-primary" >Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{ form_end(form) }}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+
+<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+
+<script>
+    $(document).ready(function() {
+
+        // Example: Handling form submission
+        $('.ckeditor').each(function(index, element) {
+            CKEDITOR.replace(element);
+        });
+        var stepper1 = new Stepper($('#stepper1')[0], {
+            linear: false,
+            animation: true
+        });
+
+        // Next Step Button Click Handler
+        $('.next-step').click(function(e) {
+            e.preventDefault()
+            var step = $(this).data('step');
+            stepper1.next();
+            // Manually trigger show event for the next step
+            $('#stepper1').trigger('show.bs-stepper', { from: step });
+        });
+
+        // Previous Step Button Click Handler
+        $('.prev-step').click(function(e) {
+            e.preventDefault()
+            var step = $(this).data('step');
+            stepper1.previous();
+            // Manually trigger show event for the previous step
+            $('#stepper1').trigger('show.bs-stepper', { from: step });
+        });
+
+        let showInMenu = $("#{{ form.showInMenu.vars.id }}")
+        let displayOrderRow = $("#{{ form.displayOrder.vars.id }}_row")
+        showInMenu.on("change", function () {
+            if($(this).is(':checked')){
+                displayOrderRow.show()
+            } else {
+                displayOrderRow.hide()
+            }
+        })
+
+        let hasCoverImage = $("#{{ form.hasCoverImage.vars.id }}")
+        let coverImageContainer = $("#{{ form.coverImage.vars.id }}_row")
+        hasCoverImage.on("change", function () {
+            if($(this).is(':checked')){
+                coverImageContainer.show()
+            } else {
+                coverImageContainer.hide()
+            }
+        })
+
+        function init() {
+            showInMenu.trigger("change");
+            hasCoverImage.trigger("change");
+        }
+        init()
+
+       var uploadTriggerButton = $("#{{ form.coverImage.vars.id }}-trigger")
+       var uploadInput = $("#{{ form.coverImage.vars.id }}")
+       var uploadPreviewContainer = $("#{{ form.coverImage.vars.id }}-preview-container")
+
+       var uploadFilePreview = $("#{{ form.coverImage.vars.id }}-file-preview")
+       uploadTriggerButton.on('click', function (event) {
+           event.preventDefault();
+           uploadInput.trigger('click')
+       })
+
+       uploadInput.on('change', function (e){
+            console.log($(this)[0], $(this)[0].files)
+            if ($(this)[0].files.length > 0) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadFilePreview.attr('src', e.target.result);
+                    uploadPreviewContainer.show()
+                }
+                reader.readAsDataURL($(this)[0].files[0]);
+            }
+        })
+    });
+</script>
+{% endblock javascript %}

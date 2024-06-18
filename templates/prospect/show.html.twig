@@ -1,0 +1,219 @@
+{% extends 'layout/base.html.twig' %}
+{% import 'layout/macros/form_render.html.twig' as custom_form_render %}
+
+{% block body %}
+<div class="card">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 d-flex justify-content-start">
+                        <h1 class="card-title">
+                            {{ prospect.firstName }} {{ prospect.lastName }}
+                        </h1>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end">
+                        <a href="{{ path('app_prospects_list') }}" class="btn btn-warning ml-2"><i
+                                    class="fa fa-arrow-left" aria-hidden="true"></i> Return</a>
+                    </div>
+                </div>
+                <hr/>
+                <div class="card-body">
+                    <div class="row">
+                        <ul class="col-md-3 col-sm-3">
+                            <p class="text-info h4">Information générale du prospect</p>
+                            <li class="col-12 mt-3">
+                                First name: {{ prospect.firstName }}
+                            </li>
+                            <li class="col-12 mt-3">
+                                Last name: {{ prospect.LastName }}
+                            </li>
+                            <li class="col-12 mt-3">
+                                Birthdate: {{ prospect.birthday|date('d-m-Y') }}
+                            </li>
+                            <li class="col-12 mt-3">
+                                Email: {{ prospect.email }}
+                            </li>
+                            <li class="col-12 mt-3">
+                                Phone number: {{ prospect.phoneNumber }}
+                            </li>
+                            <li class="col-12 mt-3">
+                                Source: {{ prospect.website.name }}
+                            </li>
+                            <li class="col-12 mt-3">
+                                Country: {{ prospect.country }}
+                            </li>
+                            <li class="col-12 mt-3">
+                                City: {{ prospect.city }}
+                            </li>
+                            <li class="col-12 mt-3">
+                                Host: {{ prospect.host }}
+                            </li>
+                            <li class="col-12 mt-3">
+                                Category selected: {{ prospect.category.label }}
+                            </li>
+                            <li class="col-12 mt-3">
+                                Services selected:
+                                {% for service in prospect.services %}
+                                    {{ service.label }}
+                                    {% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </li>
+                            <li class="col-12 mt-3">
+                                Appointment date: {{ prospect.appointment|date('d-m-Y') }}
+                            </li>
+                            <li class="col-12 mt-3">
+                                Description: {{ prospect.description }}
+                            </li>
+                        </ul>
+                        <div class="col-md-9 col-sm-9">
+                            <div class="d-flex justify-content-start">
+                                <p class="text-info h4">Tableau de suivi du dossier</p>
+                                <button type="button" data-toggle="modal" data-target="#myModal"
+                                        class="btn btn-info ml-2"><i class="fa  fa-user-plus" aria-hidden="true"></i>Add
+                                    a note
+                                </button>
+                            </div>
+                            <table class="table table-xs" id="table">
+                                <thead class="table-primary"></thead>
+                            </table>
+                        </div>
+                        <div id="note-modal">
+                            {{ render(path('app_notes_new',parameters = {prospect: prospect.id})) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block javascript %}
+
+    <script>
+        const columns = [
+        {
+            title: 'ID',
+            field: 't_id',
+            visible: false,
+            align: "center",
+            sortName: 't.id',
+            halign: "center"
+        },
+        {
+            title: 'Message',
+            field: 't_message',
+            sortable: true,
+            sortName: 't.message',
+            halign: "center",
+            align: "center"
+        },
+        {
+            title: 'Status',
+            field: 's_label',
+            sortable: true,
+            sortName: 's.label',
+            halign: "center",
+            align: 'center'
+        },
+        {
+            title: 'Created at',
+            field: 't_createdAt',
+            sortable: true,
+            sortName: 't.createdAt',
+            align: "center",
+            halign: "center",
+            formatter: function (value, row) {
+            if (value == undefined)
+            return "-";
+            var date = moment(value);
+            return date.format('DD-MMM-YYYY');
+        }},
+        {
+            title: 'Created by',
+            field: 'u_username',
+            sortable: true,
+            sortName: 'u.username',
+            align: "center",
+            halign: "center",
+            formatter: function (value, row) {
+            return value
+        }
+        },
+        {
+            title: 'Action',
+            sortable: false,
+            align: "center",
+            halign: "center",
+            formatter: function (data, row, index) {
+            let ch = '<button type="button" id="edit-button" data-note='+ data +' class="btn btn-primary btn-sm" ><i class="fa fa-pencil" aria-hidden="true"></i>edit</button>';
+            return ch;
+        }
+        },{
+        title: 'color',
+        visible: false,
+        field: 's_colorCode',
+    },
+
+        ];
+
+        $(document).ready(function () {
+        const $table = $('#table');
+
+        $table.bootstrapTable({
+        toggle: "table",
+        url: Routing.generate('app_prospects_show',{prospect: {{ prospect.id }} }),
+        sidePagination: "server",
+        loadingFontSize: '14px',
+        visibleSearch: true,
+        buttonsClass: '',
+        pageSize: 10,
+        pageList:[10, 25, 50, 100],
+        pagination: true,
+        paginationSuccessivelySize: 3,
+        rowStyle: function (row) {
+            return {css:{ 'background-color' : row.s_colorCode}}
+        },
+        onClickRow:function (row, $element, field){
+            $.ajax({
+    type: 'POST',
+    url: Routing.generate('app_notes_edit',{note: row.t_id }),
+    dataType: 'html',
+    success: function (res) {
+        //Handle your JSON data to update the DOM
+  $("#note-modal").html(res);
+  $("#myModal").show();
+    }
+})
+        } ,
+        paginationPagesBySide: 3,
+        paginationUseIntermediate: true,
+        paginationLoop: false,
+        paginationNextText: 'Next >',
+        paginationPreText: '< Prev',
+        sortName: "t.id",
+        sortOrder: "desc",
+        toolbar: "#toolbar",
+        filterControl: "true",
+        queryParams: function queryParams(params) {
+        params.columns = columns;
+        params.condition = ["t.prospect = {{ prospect.id }}"]
+        params.join = [{
+        'type' : 'left',
+        'join' : 't.status',
+        'alias' : 's',
+        'condition' : ''
+        },{
+        'type' : 'left',
+        'join' : 't.user',
+        'alias' : 'u',
+        'condition' : ''
+        }]
+        return params
+    },
+        columns: columns,
+        join: ["status","user"]
+    })
+    });
+    </script>
+    {% endblock %}

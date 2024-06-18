@@ -1,0 +1,124 @@
+{% extends 'layout/base.html.twig' %}
+{% set user_role = getUserRole() %}
+{% set user_id = getUserId() %}
+{% block body %}
+
+    <div class="card">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="card-body">
+                    <h1 class="card-title">
+                        Prospects list
+                    </h1>
+                    <hr/>
+                    <div class="card-body">
+
+                        <div class="row justify-content-end">
+
+                        </div>
+                        <div class="row">
+                            <table class="table table-xs" id="table">
+                                <thead class="table-primary"></thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block javascript %}
+
+<script>
+        const columns = [
+            {
+                title: 'ID',
+                field: 't_id',
+                visible: true,
+                align: "center",
+                sortName: 't.id',
+                halign: "center"
+            },
+            {
+                title: 'Label',
+                field: 't_label',
+                sortable: true,
+                sortName: 't.label',
+                halign: "center"
+            },
+            {
+                title: 'color',
+                field: 't_colorCode',
+                sortable: true,
+                sortName: 't.colorCode',
+                halign: "center"
+            },
+            {
+                title: 'Active',
+                field: 't_isEnabled',
+                sortable: true,
+                sortName: 't.isEnabled',
+                halign: "center",
+                formatter: function (value) {
+                return value === 1 ? 'Enabled' : 'Disabled';
+            }
+            },
+            {
+                title: 'Action',
+                field: 't_id',
+                sortable: false,
+                align: "center",
+                sortName: 't.lastName',
+                halign: "center",
+                formatter: function (data, row, index) {
+                let ch = '<a href="' + Routing.generate('app_status_edit', {status: data}) + '" target="" class="btn btn-primary btn-sm" ><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                    return ch;
+                }
+            },
+
+        ];
+
+        $(document).ready(function () {
+            const $table = $('#table');
+
+            $table.bootstrapTable({
+                toggle: "table",
+                url: Routing.generate('app_status_list'),
+                sidePagination: "server",
+                loadingFontSize: '14px',
+                visibleSearch: true,
+                buttons: {
+                    btnAddUser: {
+                        text: 'Create status',
+                        icon: 'fa fa-user-plus',
+                        html: '<a href="{{ path('app_status_new') }}" class="btn btn-success ml-2"><i class="fa  fa-user-plus" aria-hidden="true"></i> Create status</a>'
+                    }
+                },
+                buttonsClass: '',
+                pageSize: 10,
+                pageList:[10, 25, 50, 100],
+                pagination: true,
+                paginationSuccessivelySize: 3,
+                paginationPagesBySide: 3,
+                paginationUseIntermediate: true,
+                paginationLoop: false,
+                paginationNextText: 'Next >',
+                paginationPreText: '< Prev',
+                sortName: "t.id",
+                sortOrder: "desc",
+                toolbar: "#toolbar",
+                filterControl: "true",
+                queryParams: function queryParams(params) {
+                    params.columns = columns;
+                    return params
+                },
+                search: "true",
+                columns: columns,
+            })
+        });
+    </script>
+{% endblock %}

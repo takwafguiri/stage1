@@ -1,0 +1,155 @@
+{% extends 'layout/base.html.twig' %}
+
+
+
+
+{% block body %}
+
+    <div class="card">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="card-body">
+                    <h1 class="card-title">
+                        Website configuration list
+                    </h1>
+                    <hr/>
+                    <div class="card-body">
+
+                        <div class="row justify-content-end">
+
+                        </div>
+                        <div class="row">
+                            <table class="table table-xs" id="table">
+                                <thead class="table-primary"></thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block javascript %}
+
+<script>
+    const columns = [
+    {
+        title: 'ID',
+        field: 't_id',
+        visible: true,
+        align: "center",
+        sortName: 't.id',
+        halign: "center"
+    },
+
+    {
+        title: 'Tag',
+        field: 't_tag',
+        sortable: true,
+        sortName: 't.tag',
+        align: "center",
+        halign: "center",
+    },
+    {
+        title: 'Description',
+        field: 't_description',
+        sortable: true,
+        sortName: 't.description',
+        align: "center",
+        halign: "center",
+    },
+    {
+        title: 'Status',
+        field: 't_isEnabled',
+        sortable: true,
+        sortName: 't.isEnable',
+        align: "center",
+        halign: "center",
+        formatter: function (value, row) {
+            if (value)
+                return "<span class='badge badge-success'>Enabled</span>";
+
+                return "<span class='badge badge-danger'>Disabled</span>";
+             }
+    },
+    {
+        title: 'Created at',
+        field: 't_createdAt',
+        sortable: true,
+        sortName: 't.createdAt',
+        align: "center",
+        halign: "center",
+        formatter: function (value, row) {
+            if (value == undefined)
+            return "-";
+            var date = moment(value);
+            return date.format('DD-MMM-YYYY');
+        }
+    },
+    {
+        title: 'Action',
+        field: 't_id',
+        sortable: false,
+        align: "center",
+        sortName: 't.lastName',
+        halign: "center",
+        formatter: function (data, row, index) {
+        let ch = '<a href="' + Routing.generate('app_website_configuration_edit', {websiteConfiguration: data}) + '" target="" class="btn btn-primary btn-sm" ><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+        return ch;
+    }
+    },
+
+
+    ];
+
+    $(document).ready(function () {
+    const $table = $('#table');
+
+    $table.bootstrapTable({
+    toggle: "table",
+    url: Routing.generate('app_website_configuration_list'),
+    sidePagination: "server",
+    loadingFontSize: '14px',
+    visibleSearch: true,
+    buttons: {
+    btnAddconfiguration: {
+    text: 'Add configuration',
+    icon: 'fa fa-user-plus',
+    html: '<a href="{{ path('app_website_configuration_new') }}" class="btn btn-success ml-2"><i class="fa-solid fa-plus"></i> Add configuration</a>'
+                    }
+                },
+                buttonsClass: '',
+
+                pageSize: 10,
+                pageList:[10, 25, 50, 100],
+                pagination: true,
+                paginationSuccessivelySize: 3,
+                paginationPagesBySide: 3,
+                paginationUseIntermediate: true,
+                paginationLoop: false,
+                paginationNextText: 'Next >',
+                paginationPreText: '< Prev',
+
+                sortName: "t.createdAt",
+                sortOrder: "desc",
+                toolbar: "#toolbar",
+                filterControl: "true",
+                queryParams: function queryParams(params) {
+                    params.columns = columns;
+                       params.condition = [
+                        't.website = {{ app.session.get(constant('App\\Enum\\SessionKeys::SELECTED_SITE')) }}'
+                    ];
+                    return params
+                },
+                search: "true",
+                columns: columns,
+            })
+        });
+
+
+    </script>
+{% endblock %}

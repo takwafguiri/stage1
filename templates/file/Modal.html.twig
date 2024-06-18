@@ -1,0 +1,54 @@
+<script>
+    function fileSelected(input) {
+        var uploadButton = document.getElementById("upload-button");
+        var progressBar = document.querySelector(".progress-bar");
+        var progressContainer = document.getElementById("progress");
+
+        if (input.files && input.files[0]) {
+            uploadButton.style.display = "block"; // Show the upload button
+            progressContainer.style.display = "block"; // Show the progress bar container
+        } else {
+            uploadButton.style.display = "none"; // Hide the upload button if no file selected
+            progressContainer.style.display = "none"; // Hide the progress bar container if no file selected
+        }
+    }
+
+    $(document).ready(function() {
+        $('#file-upload-form').on('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                data: formData,
+                contentType: false,
+                processData: false,
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress", function(evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total * 100;
+                            $('.progress-bar').width(percentComplete + '%');
+                            if (percentComplete === 100) {
+                                // Show the upload button when upload is completed
+                                $('#upload-button').show();
+                            }
+                        }
+                    }, false);
+                    return xhr;
+                },
+                success: function(data) {
+                    // Handle success
+                    // For example, close modal or show success message
+                    $('#upload-file-modal').modal('hide');
+                },
+                error: function(xhr, status, error) {
+                    // Handle error
+                    // For example, display error message
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>

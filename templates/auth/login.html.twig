@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" href="{{ asset('template/img/icons/seoHub-favicon.png') }}" />
+    <link rel="canonical" href="https://demo-basic.adminkit.io/" />
+    <link href="{{ asset('template/css/style.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- MDBootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <title>{% block title %}Login | SEOHub{% endblock %}</title>
+
+    <style>
+        body {
+            background-color: hsl(218, 41%, 15%);
+            background-image: radial-gradient(650px circle at 0% 0%,
+            hsl(218, 41%, 35%) 15%,
+            hsl(218, 41%, 30%) 35%,
+            hsl(218, 41%, 20%) 75%,
+            hsl(218, 41%, 19%) 80%,
+            transparent 100%),
+            radial-gradient(1250px circle at 100% 100%,
+                    hsl(218, 41%, 45%) 15%,
+                    hsl(218, 41%, 30%) 35%,
+                    hsl(218, 41%, 20%) 75%,
+                    hsl(218, 41%, 19%) 80%,
+                    transparent 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #radius-shape-1 {
+            height: 220px;
+            width: 220px;
+            top: -60px;
+            left: -130px;
+            background: radial-gradient(#44006b, #ad1fff);
+            overflow: hidden;
+            position: absolute;
+        }
+
+        #radius-shape-2 {
+            border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+            bottom: -60px;
+            right: -110px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(#44006b, #ad1fff);
+            overflow: hidden;
+            position: absolute;
+        }
+
+        .bg-glass {
+            background-color: hsla(0, 0%, 100%, 0.1) !important;
+            backdrop-filter: saturate(200%) blur(25px);
+        }
+
+        .card-white {
+            background-color: white !important;
+            color: black !important;
+        }
+
+        .form-label,
+        .form-control,
+        .btn-link {
+            color: midnightblue !important;
+        }
+
+        .form-control {
+            background-color: rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .form-control:focus {
+            background-color: rgba(0, 0, 0, 0.2);
+            color: black;
+        }
+
+        .btn-primary {
+            background-color: #4e73df;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #2e59d9;
+        }
+
+        .fade-in-out {
+            animation: fadeInOut 10s forwards;
+        }
+
+        @keyframes fadeInOut {
+            0%,
+            100% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .input-group .form-control:focus {
+            box-shadow: none;
+        }
+
+        .input-group-text {
+            background-color: rgba(0, 0, 0, 0.1);
+            border: none;
+            color: midnightblue;
+        }
+    </style>
+</head>
+
+<body>
+<div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+<div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+
+<div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+    <div class="row gx-lg-5 align-items-center mb-5">
+        <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+            <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
+                The best offer <br />
+                <span style="color: hsl(218, 81%, 75%)">for your business</span>
+            </h1>
+            <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%); text-align: ;">
+                Welcome to our centralized website management platform!
+                </br>
+                Managing multiple websites can be overwhelming, but with our solution, you can streamline
+                operations and save time.
+                Our all-in-one interface lets you control every aspect of your websites, securely and privately.
+                </br>
+                Ready to simplify your web management experience? <a href="#" class="contact-button">Contact us</a>
+            </p>
+        </div>
+
+        <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+            <div class="card bg-glass card-white">
+                <div class="card-body px-4 py-5 px-md-5">
+                    {% for message in app.flashes('error') %}
+                        <div id="error-message" class="alert alert-danger text-center fade-in-out" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    <div class="text-center mb-4">
+                        <h2 class="welcome-text" style="color: hsl(219, 83%, 28%)">Welcome to SEO Hub</h2>
+                        <span class="logo">
+                            </span>
+                    </div>
+                    <form method="post">
+                        <div class="mb-3">
+                            <label class="form-label" for="username">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                <input type="text" value="{{ last_username }}" name="_username" id="username" class="form-control form-control-lg" autocomplete="username" required autofocus>
+                            </div>
+                        </div>
+                        <div class="mb-3 position-relative">
+                            <label class="form-label" for="password">Password</label>
+                            <div class="input-group">
+                                <input class="form-control form-control-lg" type="password" name="_password" id="password" autocomplete="current-password" required>
+                                <span class="input-group-text"><i class="fa fa-eye" id="togglePassword" style="cursor: pointer;"></i></span>
+                            </div>
+                        </div>
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                        <div class="text-center mt-3">
+                            <button class="btn btn-lg btn-primary" type="submit">
+                                Login
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- MDBootstrap JS -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.js"></script>
+<script src="{{ asset('template/js/app.js') }}"></script>
+<script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function () {
+        // toggle the type attribute
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        // toggle the eye / eye slash icon
+        this.classList.toggle('fa-eye-slash');
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+{% import 'layout/macros/form_render.html.twig' as custom_form_render %}
+{% block body %}
+    <div class="modal" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{ form_start(form, {'action': path('app_notes_new', { 'prospect': prospect.id })}) }}
+                    {{ custom_form_render.row_text(form.message, 'col-8 mt-3') }}
+                    {{ custom_form_render.row_text(form.status, 'col-8 mt-3') }}
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">
+                            {% if isNew %}
+                                Create
+                            {% else %}
+                                Edit
+                            {% endif %} note
+                        </button>
+                    </div>
+                    {{ form_end(form) }}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>

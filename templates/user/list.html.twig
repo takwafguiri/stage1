@@ -1,0 +1,214 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block body %}
+
+<div class="card">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="card-body">
+                <h1 class="card-title">Users list</h1>
+                <hr/>
+                <div class="card-body">
+                    <div class="row justify-content-end">
+                    </div>
+                    <div class="row">
+                        <table class="table table-xs" id="table">
+                            <thead class="table-primary"></thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <input type="hidden" id="userId" name="userId" value="">
+                    <div class="mb-3">
+                        <label for="password" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="savePasswordBtn">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+    const rolesEnum = JSON.parse('{{ getAllRoles() | json_encode | raw }}');
+    const columns = [
+        {
+            title: 'ID',
+            field: 't_id',
+            visible: true,
+            align: "center",
+            sortName: 't.id',
+            halign: "center"
+        },
+        {
+            title: 'Username',
+            field: 't_username',
+            sortable: true,
+            sortName: 't.username',
+            halign: "center"
+        },
+        {
+            title: 'Name',
+            field: 't_firstName',
+            sortable: true,
+            sortName: 't.firstName',
+            halign: "center"
+        },
+        {
+            title: 'Last name',
+            field: 't_lastName',
+            sortable: true,
+            sortName: 't.lastName',
+            halign: "center"
+        },
+        {
+            title: 'Role',
+            field: 't_roles',
+            sortable: false,
+            sortName: 't.roles',
+            halign: "center",
+            align: "center",
+            formatter: function (value, row) {
+                if(value) {
+                    let rolesToDisplay = '';
+                    let rolesArray = value.replace(/[\[\]/"/"']+/g, '').split(',').map(element => element.trim());
+                    rolesArray.map((role) => rolesToDisplay += rolesEnum[role] + " | ")
+                    return rolesToDisplay.slice(0, -3)
+                }
+                return "aaa";
+            }
+        },
+        {
+            title: 'Status',
+            field: 't_isEnabled',
+            sortable: true,
+            sortName: 't.isEnabled',
+            align: "center",
+            halign: "center",
+            formatter: function (value, row) {
+                if (value)
+                    return "<span class='badge badge-success'>Enabled</span>";
+                return "<span class='badge badge-danger'>Disabled</span>";
+            }
+        },
+        {
+            title: 'Created at',
+            field: 't_createdAt',
+            sortable: true,
+            sortName: 't.createdAt',
+            align: "center",
+            halign: "center",
+            formatter: function (value, row) {
+                if (value == undefined)
+                    return "-";
+                var date = moment(value);
+                return date.format('DD-MMM-YYYY');
+            }
+        },
+        {
+            title: 'Action',
+            field: 't_id',
+            sortable: false,
+            align: "center",
+            sortName: 't.lastName',
+            halign: "center",
+            formatter: function (data, row, index) {
+                let editBtn = '<a href="' + Routing.generate('app_users_edit', {user: data}) + '" target="" class="btn btn-primary btn-sm"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                let changePasswordBtn = '<button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#changePasswordModal" onclick="setUserId(' + data + ')"><i class="fa fa-lock" aria-hidden="true"></i></button>';
+                return editBtn + ' ' + changePasswordBtn;
+            }
+        },
+    ];
+
+    $(document).ready(function () {
+        const $table = $('#table');
+
+        $table.bootstrapTable({
+            toggle: "table",
+            url: Routing.generate('app_users_list'),
+            sidePagination: "server",
+            loadingFontSize: '14px',
+            visibleSearch: true,
+            buttons: {
+                btnAddUser: {
+                    text: 'Add user',
+                    icon: 'fa fa-user-plus',
+                    html: '<a href="{{ path('app_users_add') }}" class="btn btn-success ml-2"><i class="fa  fa-user-plus" aria-hidden="true"></i> Add user</a>'
+                }
+            },
+            buttonsClass: '',
+
+            pageSize: 10,
+            pageList:[10, 25, 50, 100],
+            pagination: true,
+            paginationSuccessivelySize: 3,
+            paginationPagesBySide: 3,
+            paginationUseIntermediate: true,
+            paginationLoop: false,
+            paginationNextText: 'Next >',
+            paginationPreText: '< Prev',
+
+            sortName: "t.id",
+            sortOrder: "desc",
+            toolbar: "#toolbar",
+            filterControl: "true",
+            queryParams: function queryParams(params) {
+                params.columns = columns;
+                params.condition = [
+                    't.id != {{ app.user.id }}'
+                ];
+                return params
+            },
+            search: "true",
+            columns: columns,
+        });
+
+        $('#savePasswordBtn').on('click', function() {
+            const userId = $('#userId').val();
+            const password = $('#password').val();
+            
+            $.ajax({
+                url: Routing.generate('app_users_change_password', { id: userId }),
+                method: 'POST',
+                data: { password: password },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        alert(response.message);
+                        $('#changePasswordModal').modal('hide');
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while changing the password.');
+                }
+            });
+        });
+    });
+
+    function setUserId(userId) {
+        $('#userId').val(userId);
+    }
+</script>
+{% endblock %}

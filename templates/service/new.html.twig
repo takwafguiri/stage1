@@ -1,0 +1,84 @@
+{% extends 'layout/base.html.twig' %}
+{% import 'layout/macros/form_render.html.twig' as custome_form_render %}
+
+{% block body %}
+    <div class="card">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 d-flex justify-content-start">
+                            <h1 class="card-title">{% if isNew %}Add{% else %}Edit{% endif %} Service</h1>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end">
+                            <a href="{{ path('app_service_list') }}" class="btn btn-warning ml-2"><i class="fa fa-arrow-left" aria-hidden="true"></i> Return</a>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="card-body">
+                        
+                        <div>
+                            {{ form_start(form) }}
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        {{ custome_form_render.row_select(form.category, "col-12 mt-3") }}
+                                        {{ custome_form_render.row_text(form.tag, "col-12 mt-3") }}
+                                        {{ custome_form_render.row_text(form.label, "col-12 mt-3") }}
+                                        {{ custome_form_render.row_text(form.description, "col-12 mt-3") }}
+                                        {{ custome_form_render.row_text(form.dureeDeService, "col-12 mt-3") }}
+                                        {{ custome_form_render.row_text(form.unitPrice, "col-12 mt-3") }}
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        {{ custome_form_render.row_upload_image(form.photo, "col-12 mt-3", filePath) }}
+                                    </div>
+                                </div>
+                                   <hr/>
+                                <div class="row justify-content-end">
+                                    {{ custome_form_render.row_switch(form.isEnabled, 'd-flex justify-content-end') }}
+                                </div>
+
+                                <div class="row justify-content-center mt-5">
+                                    <button type="submit" class="btn btn-success col-md-2">{% if isNew %}Add{% else %}Edit{% endif %} Service</button>
+                                    <button type="submit" name="submit_action" value="save_and_create" class="btn btn-info col-md-2 ml-2">{% if isNew %}Add{% else %}Edit{% endif %} Service and page</button>
+
+                                </div>
+                                                        <div class="row justify-content-center mt-5">
+                        </div>
+               
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function() {
+       var uploadTriggerButton = $("#{{ form.photo.vars.id }}-trigger")
+       var uploadInput = $("#{{ form.photo.vars.id }}")
+       var uploadPreviewContainer = $("#{{ form.photo.vars.id }}-preview-container")
+       console.log("#{{ form.photo.vars.id }}-preview-container")
+       var uploadFilePreview = $("#{{ form.photo.vars.id }}-file-preview")
+       uploadTriggerButton.on('click', function (event) {
+           event.preventDefault();
+           uploadInput.trigger('click')
+       })
+
+       uploadInput.on('change', function (e){
+            console.log($(this)[0], $(this)[0].files)
+            if ($(this)[0].files.length > 0) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadFilePreview.attr('src', e.target.result);
+                    uploadPreviewContainer.show()
+                }
+                reader.readAsDataURL($(this)[0].files[0]);
+            }
+        })
+    })
+</script>
+{% endblock %}
+

@@ -1,0 +1,20 @@
+{% macro row_text(form, classes) %}
+    <div class="{{ classes }} {% if form.vars.row_attr is defined and form.vars.row_attr.class is defined and form.vars.row_attr.class is not empty %}{{ form.vars.row_attr.class }}{% endif %}">
+        {% if form.vars.label_html %}
+            <label
+                    class="{% if form.vars.label_attr is defined and form.vars.label_attr.class is defined and form.vars.label_attr.class is not empty %}{{ form.vars.label_attr.class }}{% endif %}"
+                    for="{{ form.vars.id }}"
+            >
+                {{ form.vars.label }}
+
+            </label>
+        {% endif %}
+        {{ form_widget(form, {'attr': {'class': form.vars.attr.class ~ (form.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+
+        {% if form.vars.errors|length > 0 %}
+            <div class="text-danger invalid-feedback">
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}

@@ -1,0 +1,163 @@
+{% extends 'layout/base.html.twig' %}
+{% set user_role = getUserRole() %}
+{% set user_id = getUserId() %}
+{% block body %}
+
+    <div class="card">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="card-body">
+                    <h1 class="card-title">
+                        Prospects list
+                    </h1>
+                    <hr/>
+                    <div class="card-body">
+
+                        <div class="row justify-content-end">
+
+                        </div>
+                        <div class="row">
+                            <table class="table table-xs" id="table">
+                                <thead class="table-primary"></thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block javascript %}
+
+<script>
+    const StatusEnum = JSON.parse('{{ getAllStatus() | json_encode | raw }}');
+    const userRole = JSON.parse('{{ user_role | json_encode | raw }}');
+        const columns = [
+            {
+                title: 'ID',
+                field: 't_id',
+                visible: true,
+                align: "center",
+                sortName: 't.id',
+                halign: "center"
+            },
+            {
+                title: 'Name',
+                field: 't_firstName',
+                sortable: true,
+                sortName: 't.firstName',
+                halign: "center"
+            },
+            {
+                title: 'Last name',
+                field: 't_lastName',
+                sortable: true,
+                sortName: 't.lastName',
+                halign: "center"
+            },
+            {
+                title: 'Site',
+                field: 'w_name',
+                sortable: true,
+                sortName: 'w.name',
+                halign: "center"
+            },
+            {
+                title: 'Commercial',
+                field: 'u_username',
+                sortable: true,
+                sortName: 'u.username',
+                halign: "center"
+            },
+            {
+                title: 'Created at',
+                field: 't_createdAt',
+                sortable: true,
+                sortName: 't.createdAt',
+                align: "center",
+                halign: "center",
+                formatter: function (value, row) {
+                    if (value == undefined)
+                        return "-";
+                    var date = moment(value);
+                    return date.format('DD-MMM-YYYY');
+                }
+            },
+            {
+                title: 'Action',
+                field: 't_id',
+                sortable: false,
+                align: "center",
+                sortName: 't.lastName',
+                halign: "center",
+                formatter: function (data, row, index) {
+                    let ch = '<a href="' + Routing.generate('app_customers_edit', {customer: data}) + '" target="" class="btn btn-primary btn-sm" ><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                    return ch;
+                }
+            },
+
+        ];
+
+        $(document).ready(function () {
+            const $table = $('#table');
+
+            $table.bootstrapTable({
+                toggle: "table",
+                url: Routing.generate('app_customers_list'),
+                sidePagination: "server",
+                loadingFontSize: '14px',
+                visibleSearch: true,
+                buttons: {
+                    btnAddUser: {
+                        text: 'Add prospect',
+                        icon: 'fa fa-user-plus',
+                        html: '<a href="{{ path('app_customers_add') }}" class="btn btn-success ml-2"><i class="fa  fa-user-plus" aria-hidden="true"></i> Add Customer</a>'
+                    }
+                },
+                buttonsClass: '',
+                pageSize: 10,
+                pageList:[10, 25, 50, 100],
+                pagination: true,
+                paginationSuccessivelySize: 3,
+                paginationPagesBySide: 3,
+                paginationUseIntermediate: true,
+                paginationLoop: false,
+                paginationNextText: 'Next >',
+                paginationPreText: '< Prev',
+                sortName: "t.id",
+                sortOrder: "desc",
+                toolbar: "#toolbar",
+                filterControl: "true",
+                queryParams: function queryParams(params) {
+                    params.columns = columns;
+                    params.join = [
+                        {
+                        'type' : 'left',
+                        'join' : 't.commercial',
+                        'alias' : 'u',
+                        'condition': "u.roles like '%ROLE_COMMERCIAL%'"
+                    }, {
+                        'type' : 'left',
+                        'join' : 't.website',
+                        'alias' : 'w',
+                        'condition' : ''
+                    }
+                    ]
+                    if (userRole === "ROLE_COMMERCIAL") {
+                      params.condition = [
+                        "u.roles like '%ROLE_COMMERCIAL%' and u.id = {{ user_id }} and t.website = {{ selected_website }}"
+                    ]
+                    }
+                    return params
+                },
+                search: "true",
+                join: "user",
+                columns: columns,
+            })
+        });
+    </script>
+{% endblock %}

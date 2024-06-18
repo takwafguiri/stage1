@@ -1,0 +1,63 @@
+{% extends 'layout/base.html.twig' %}
+{% import 'layout/macros/form_render.html.twig' as custom_form_render %}
+
+{% block body %}
+    <div class="card">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 d-flex justify-content-start">
+                            <h1 class="card-title">
+                                {% if isNew %}
+                                    Create
+                                {% else %}
+                                    Edit
+                                {% endif %} prospect
+                            </h1>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end">
+                            <a href="{{ path('app_customers_list') }}" class="btn btn-warning ml-2"><i
+                                        class="fa fa-arrow-left" aria-hidden="true"></i> Return</a>
+                        </div>
+                    </div>
+                    <hr/>
+
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        <div class="row">
+                            {{ custom_form_render.row_text(form.firstName, "col-md-4 col-12 mt-3") }}
+                            {{ custom_form_render.row_text(form.lastName, "col-md-4 col-12 mt-3") }}
+                        </div>
+                        <div class="row">
+                            {{ custom_form_render.row_text(form.phoneNumber, "col-md-4 col-12 mt-3") }}
+                            {{ custom_form_render.row_select(form.email, 'col-md-4 col-12 mt-3') }}
+                        </div>
+                        <div class="row">
+                            {{ custom_form_render.row_text(form.website, "col-md-4 col-12 mt-3") }}
+                            {{ custom_form_render.row_select(form.commercial, 'col-md-4 col-12 mt-3') }}
+                        </div>
+                        <div class="row justify-content-center mt-5">
+                            <button type="submit" class="btn btn-success col-md-2">
+                                {% if isNew %}
+                                    Create
+                                {% else %}
+                                    Edit
+                                {% endif %} Customer
+                            </button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+            let websiteContainer = $("#websites-container");
+        });
+    </script>
+{% endblock %}

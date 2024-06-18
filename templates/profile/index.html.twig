@@ -1,0 +1,159 @@
+{% extends 'layout/base.html.twig' %}
+{% import 'layout/macros/form_render.html.twig' as custome_form_render %}
+
+{% block title %}
+    Profile
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .profile-picture-container {
+            position: relative;
+            display: inline-block;
+
+        }
+
+        .profile-picture-container img {
+            transition: filter 0.3s ease; /* Smooth transition for the image filter */
+        }
+
+        .profile-picture-container:hover img {
+            filter: brightness(70%); /* Apply brightness filter on hover */
+        }
+
+        .profile-picture-container svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none !important;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+            border-radius: 50%;
+        }
+
+        .profile-picture-container:hover svg {
+            position: absolute;
+            display: block !important;
+            color: white;
+        }
+
+        .profile-picture-container:hover{
+            display: block; /* Show the icon on hover */;
+            cursor: pointer !important;
+        }
+    </style>
+{% endblock %}
+{%  block body %}
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="col-md-4 col-xl-3">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Profile Details</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <div id="profile-picture-container" class="profile-picture-container mb-3">
+                            {% if connectedUser.picture is not null %}
+                                <img src="{{ app.user.picture }}" id="profile-picture" class="img-fluid rounded-circle mb-2" width="128" height="128"  alt="{{ connectedUser.username }}" />
+                            {% else %}
+                                <img src="{{ asset('template/img/avatars/avatar.png') }}" class="avatar img-fluid rounded me-1" alt="{{ connectedUser.username }}" />
+                            {% endif %}
+                            <i class="fa fa-pencil"></i>
+                        </div>
+                        {{ form_start(uploadPictureForm, {'action': path('app_upload_profile_picture'), 'method': 'POST'}) }}
+                        <div class="uploaded-input" style="display: none">
+                            {{ form_row(uploadPictureForm.picture) }}
+                        </div>
+                        <button type="submit" id="upload-button" class="btn btn-primary" style="display: none;">Upload</button>
+
+                        {{ form_end(uploadPictureForm) }}
+                        <h5 class="card-title mb-0">{{ connectedUser.firstName }} {{ connectedUser.lastName }} </h5>
+                        <div class="text-muted mb-2">{{ connectedUser.roles | extractRole }}</div>
+                    </div>
+                    <hr class="my-0" />
+                    <div class="card-body">
+                        <h5 class="h6 card-title">About</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-1"><span data-feather="phone" class="feather-sm me-1">
+
+                                    </span> Phone: <a href="#">
+                                    {% if connectedUser.phoneNumber is not null %}
+                                        {{ connectedUser.phoneNumber }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <hr class="my-0" />
+                    <div class="card-body">
+                        <h5 class="h6 card-title">Working on</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-1"><a href="#">staciehall.co</a></li>
+                            <li class="mb-1"><a href="#">Twitter</a></li>
+                            <li class="mb-1"><a href="#">Facebook</a></li>
+                            <li class="mb-1"><a href="#">Instagram</a></li>
+                            <li class="mb-1"><a href="#">LinkedIn</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8 col-xl-9">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Update profile</h5>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(profileForm) }}
+                        <div class="row">
+                            {{ custome_form_render.row_text(profileForm.username, "col-md-4 col-12") }}
+                            {{ custome_form_render.row_text(profileForm.firstName, "col-md-4 col-12") }}
+                            {{ custome_form_render.row_text(profileForm.lastName, "col-md-4 col-12") }}
+                        </div>
+                        <div class="row mt-3">
+                            {{ custome_form_render.row_text(profileForm.phoneNumber, "col-md-4 col-12") }}
+                        </div>
+                        <hr class="mt-4"/>
+                        <div class="row mt-4 d-flex justify-content-center">
+                            <button type="submit" class="btn btn-success col-md-3 col-6">Update</button>
+                        </div>
+                        {{ form_end(profileForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $( document ).ready(function() {
+            let imageContainer = $("#profile-picture-container")
+            let uploadInput = $("#{{ uploadPictureForm.picture.vars.id }}")
+
+            imageContainer.on('click', function (event) {
+                uploadInput.trigger('click')
+            })
+
+            uploadInput.on('change', function (e){
+                var uploadButton = $('#upload-button');
+                if ($(this)[0].files.length > 0) {
+
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#profile-picture').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL($(this)[0].files[0]);
+                    uploadButton.show();
+                } else {
+                    uploadButton.hide();
+                }
+            })
+        });
+    </script>
+{% endblock javascript %}

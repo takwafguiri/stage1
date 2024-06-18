@@ -1,0 +1,295 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block stylesheets%}
+    <style>
+        #upload-preview {
+            margin-bottom: 10px;
+            max-width: 100%;
+        }
+        .modal-body .upload-preview-container{
+            max-width: 90%;
+            max-height: 80vh;
+        }
+        .modal-body .upload-container {
+            height: 100%; /* Occupy full height */
+            display: flex;
+            flex-direction: column; /* Align children vertically */
+            justify-content: center; /* Center children vertically */
+        }
+
+        .modal-body .upload-card {
+            padding: 10px 30px 40px;
+        }
+
+        .modal-body  .upload-card h3 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .modal-body .drop_box {
+            margin: 10px 0;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border: 3px dotted #a3a3a3;
+            border-radius: 5px;
+            flex-grow: 1; /* Allow the drop box to expand */
+        }
+
+        .modal-body .drop_box h4 {
+            font-size: 16px;
+            font-weight: 400;
+            color: #2e2e2e;
+        }
+
+        .modal-body .drop_box p {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: #a3a3a3;
+        }
+
+        .modal-body .btn {
+            text-decoration: none;
+            background-color: #005af0;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .modal-body .btn:hover{
+            text-decoration: none;
+            background-color: #ffffff;
+            color: #005af0;
+            padding: 10px 20px;
+            border: none;
+            outline: 1px solid #010101;
+        }
+        .modal-body .form input {
+            margin: 10px 0;
+            width: 100%;
+            background-color: #e2e2e2;
+            border: none;
+            outline: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    <div class="card">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="card-body">
+                    <h1 class="card-title">
+                       File list
+                    </h1>
+                    <hr/>
+                    <div class="card-body">
+
+                        <div class="row justify-content-end">
+
+                        </div>
+                        <div class="row">
+                            <table class="table table-xs" id="table">
+                                <thead class="table-primary"></thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+<div class="modal fade" id="upload-file-modal" tabindex="-1" role="dialog" aria-labelledby="upload-file-modalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            {{ form_start(uploadFileForm, {'id': 'file-upload-form', 'action': path('app_upload_website_file'), 'method': 'POST', 'attr': {'enctype': 'multipart/form-data'}}) }}
+            <div class="modal-header">
+                <h5 class="modal-title" id="upload-file-modalTitle">Upload new file</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-container">
+                    <div class="upload-card">
+                        <h3>Upload Files</h3>
+                        <div class="drop_box">
+                            <header>
+                                <h4>Select File here</h4>
+                            </header>
+                            <p>Files Supported: .*</p>
+                                <div class="upload-input" style="display:none;">
+                                    {{ form_row(uploadFileForm.file) }}
+                                </div>
+                            <div class="upload-preview-container" style="display: none">
+                                <img id="upload-preview" src="">
+                            </div>
+                            <button type="button" class="btn" id="upload-input-button">Choose File</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" id="upload-button" class="btn btn-success" style="display: none;">Upload file</button>
+            </div>
+            {{ form_end(uploadFileForm) }}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block javascript %}
+
+<script type="application/javascript">
+    $(document).ready(function() {
+        const baseUrl = "{{ absolute_url("/") }}";
+        const columns = [
+            {
+                title: 'ID',
+                field: 't_id',
+                visible: true,
+                align: "center",
+                sortName: 't.id',
+                halign: "center"
+            },
+            {
+                title: 'File name',
+                field: 't_originName',
+                sortable: true,
+                sortName: 't.originName',
+                halign: "center"
+            },
+            {
+                title: 'Extension',
+                field: 't_extension',
+                sortable: true,
+                sortName: 't.extension',
+                halign: "center"
+            },
+            {
+                title: 'Created at',
+                field: 't_createdAt',
+                sortable: true,
+                sortName: 't.createdAt',
+                align: "center",
+                halign: "center",
+                formatter: function (value, row) {
+                    if (value == undefined)
+                        return "-";
+                    var date = moment(value);
+                    return date.format('DD-MMM-YYYY');
+                }
+            },
+            {
+                title: 'Action',
+                field: 't_path',
+                sortable: false,
+                align: "center",
+                sortName: 't.path',
+                halign: "center",
+               formatter: function (data, row, index) {
+                    if(data) {
+                        let viewButton = '<a href="' + baseUrl + data + '" target="_blank" class="btn btn-info btn-sm action-btn"><i class="fa fa-eye" aria-hidden="true"></i></a>';
+                        let copyButton = '<button class="btn btn-warning btn-sm action-btn copy-button" data-toggle="tooltip" title="Copied!" data-clipboard-text="' + baseUrl + data + '"><i class="fa fa-copy" aria-hidden="true"></i></button>';
+                        return viewButton + ' ' + copyButton;
+                    }
+                }
+            },
+        ];
+
+        const uploadInput = $("#{{ uploadFileForm.file.vars.id }}");
+        const formSubmitButton = $("#upload-button");
+        const uploadInputTrigger = $("#upload-input-button");
+        const $table = $('#table');
+
+        $table.bootstrapTable({
+            toggle: "table",
+            url: Routing.generate('app_file_index'),
+            sidePagination: "server",
+            loadingFontSize: '14px',
+            visibleSearch: true,
+            buttons: {
+                btnAddUser: {
+                    text: 'Add user',
+                    icon: 'fa fa-user-plus',
+                    html: '<button type="button" class="btn btn-success" data-toggle="modal" data-target="#upload-file-modal"><i class="fa fa-upload mr-1" aria-hidden="true"></i> Upload file</a></button>'
+                }
+            },
+            buttonsClass: '',
+            pageSize: 10,
+            pageList:[10, 25, 50, 100],
+            pagination: true,
+            paginationSuccessivelySize: 3,
+            paginationPagesBySide: 3,
+            paginationUseIntermediate: true,
+            paginationLoop: false,
+            paginationNextText: 'Next >',
+            paginationPreText: '< Prev',
+            sortName: "t.id",
+            sortOrder: "desc",
+            toolbar: "#toolbar",
+            filterControl: "true",
+            queryParams: function queryParams(params) {
+                params.columns = columns;
+                params.condition = [
+                    't.website = {{ app.session.get(constant('App\\Enum\\SessionKeys::SELECTED_SITE'))  }}'
+                ];
+                return params
+            },
+            search: "true",
+            columns: columns,
+        });
+
+        var clipboard = new ClipboardJS('.copy-button');
+        clipboard.on('success', function(e) {
+            // Show tooltip
+            $(e.trigger).tooltip('show');
+
+            // Hide tooltip after a short delay
+            setTimeout(function() {
+                $(e.trigger).tooltip('hide');
+            }, 1500);
+        });
+
+        //Upload
+        uploadInputTrigger.on('click', function (event){
+            uploadInput.trigger("click")
+        });
+
+        uploadInput.on('change', function (e){
+            if ($(this)[0].files.length > 0) {
+                var file = $(this)[0].files[0];
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var fileExtension = file.name.split('.').pop().toLowerCase();
+                    if (fileExtension === 'jpg' || fileExtension === 'jpeg' || fileExtension === 'png' || fileExtension === 'gif') {
+                        // It's an image file, display the preview
+                        $('#upload-preview').attr('src', e.target.result);
+                    } else {
+                        // It's not an image file, show default file icon
+                    $('#upload-preview').addClass('fas fa-file fa-4x');
+                    }
+                    $(".upload-preview-container").show();
+                    formSubmitButton.show();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
+
+    
+{% endblock %}

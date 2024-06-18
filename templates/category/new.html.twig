@@ -1,0 +1,94 @@
+{% extends 'layout/base.html.twig' %}
+{% import 'layout/macros/form_render.html.twig' as custome_form_render %}
+
+{% block stylesheets %}
+    <style>
+        .drop_box {
+            margin: 10px 0;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border: 3px dotted #a3a3a3;
+            border-radius: 5px;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="card">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 d-flex justify-content-start">
+                            <h1 class="card-title">
+                                {% if isNew %}Create new {% else %}Edit{% endif %} category
+                            </h1>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end">
+                            <a href="{{ path('app_category_list') }}" class="btn btn-warning ml-2"><i
+                                        class="fa fa-arrow-left" aria-hidden="true"></i> Return</a>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                            {{ custome_form_render.row_text(form.parent, "col-12 mt-3") }}
+                            {{ custome_form_render.row_text(form.tag, "col-12 mt-3") }}
+                            {{ custome_form_render.row_text(form.label, "col-12 mt-3") }}
+                            {{ custome_form_render.row_text(form.description, "col-12 mt-3") }}
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                {{ custome_form_render.row_upload_image(form.picture, "col-12 mt-3", filePath) }}
+                            </div>
+                        </div>
+
+                               <hr/>
+                                <div class="row justify-content-end">
+                                    {{ custome_form_render.row_switch(form.isEnabled, 'd-flex justify-content-end') }}
+                                </div>
+                                
+                                                <div class="row justify-content-center mt-5">
+                            <button type="submit" name="submit_action" value="save" class="btn btn-success col-md-2">{% if isNew %}Add{% else %}Edit{% endif %} category</button>
+                            <button type="submit" name="submit_action" value="save_and_create" class="btn btn-info col-md-2 ml-2">{% if isNew %}Add{% else %}Edit{% endif %} category and page</button>
+                        </div>
+
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function() {
+        var uploadTriggerButton = $("#{{ form.picture.vars.id }}-trigger")
+       var uploadInput = $("#{{ form.picture.vars.id }}")
+       var uploadPreviewContainer = $("#{{ form.picture.vars.id }}-preview-container")
+       console.log("#{{ form.picture.vars.id }}-preview-container")
+       var uploadFilePreview = $("#{{ form.picture.vars.id }}-file-preview")
+       uploadTriggerButton.on('click', function (event) {
+           event.preventDefault();
+           uploadInput.trigger('click')
+       })
+
+       uploadInput.on('change', function (e){
+            console.log($(this)[0], $(this)[0].files)
+            if ($(this)[0].files.length > 0) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadFilePreview.attr('src', e.target.result);
+                    uploadPreviewContainer.show()
+                }
+                reader.readAsDataURL($(this)[0].files[0]);
+            }
+        })
+    })
+</script>
+{% endblock %}

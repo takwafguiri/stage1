@@ -1,0 +1,38 @@
+<ul class="sidebar-nav">
+    <li class="sidebar-header">
+        Pages
+    </li>
+    <li class="sidebar-item {% if "app_dashboard" in app.request.attributes.get('_route') %} active {% endif %}">
+        <a class="sidebar-link" href="{{ path('app_dashboard') }}">
+            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+        </a>
+    </li>
+    <li class="sidebar-header">
+        Manage application
+    </li>
+    <li class="sidebar-item {% if "app_users_" in app.request.attributes.get('_route') %} active {% endif %}">
+        <a class="sidebar-link" href="{{ path('app_users_list') }}">
+            <i class="fa fa-users" aria-hidden="true"></i> <span class="align-middle">Users</span>
+        </a>
+    </li>
+    <li class="sidebar-item {% if "app_website" in app.request.attributes.get('_route') %} active {% endif %}">
+        <a class="sidebar-link" href="{{ path('app_website_list') }}">
+            <i class="fa fa-globe" aria-hidden="true"></i> <span class="align-middle">Websites</span>
+        </a>
+    </li>
+    <li class="sidebar-item {% if "app_prospects_" in app.request.attributes.get('_route') %} active {% endif %}">
+        <a class="sidebar-link" href="{{ path('app_prospects_list') }}">
+            <i class="fa fa-usersw" aria-hidden="true"></i> <span class="align-middle">Prospects</span>
+        </a>
+    </li>
+    <li class="sidebar-item {% if "app_status_" in app.request.attributes.get('_route') %} active {% endif %}">
+        <a class="sidebar-link" href="{{ path('app_status_list') }}">
+            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Status</span>
+        </a>
+    </li>
+    <li class="sidebar-item {% if "app_customers_" in app.request.attributes.get('_route') %} active {% endif %}">
+        <a class="sidebar-link" href="{{ path('app_customers_list') }}">
+            <i class="fa fa-usersw" aria-hidden="true"></i> <span class="align-middle">Customers</span>
+        </a>
+    </li>
+</ul>
