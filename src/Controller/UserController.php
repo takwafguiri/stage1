@@ -59,32 +59,36 @@ class UserController extends AbstractController
         }
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            if ($isNew) {
-                $user->setPassword(
-                    $userPasswordHasher->hashPassword(
-                        $user,
-                        $form->get('Password')->getData()
-                    )
-                );
-            }
-            $user->setRoles([$form->get('role')->getData()]);
-            if ($form->get('role')->getData() == UserRole::ROLE_ADMIN) {
-                foreach ($user->getWebsites() as $website) {
-                    $user->removeWebsite($website);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                if ($isNew) {
+                    $user->setPassword(
+                        $userPasswordHasher->hashPassword(
+                            $user,
+                            $form->get('Password')->getData()
+                        )
+                    );
                 }
+                $user->setRoles([$form->get('role')->getData()]);
+                if ($form->get('role')->getData() == UserRole::ROLE_ADMIN) {
+                    foreach ($user->getWebsites() as $website) {
+                        $user->removeWebsite($website);
+                    }
+                }
+                $this->userRepository->save($user);
+                $this->addFlash('success', $successMessage);
+                return $this->redirectToRoute('app_users_list');
+            } else {
+                $this->addFlash('error', 'Please validate all fields');
             }
-            $this->userRepository->save($user);
-            $this->addFlash('success', $successMessage);
-            return $this->redirectToRoute('app_users_list');
-        } else {
-            $this->addFlash('error', 'Please validate all fields');
         }
+
 
         return $this->render('user/new.html.twig', [
             'form' => $form->createView(),
             'isNew' => $isNew
         ]);
+    
     }
 
     #[Route(path: '/change-password/{id}', name: 'change_password', options: ['expose' => true], methods: ['POST'])]
