@@ -1,8 +1,11 @@
 {% extends 'layout/base.html.twig' %}
 {% set user_role = getUserRole() %}
-{% set user_id = getUserId() %}
-{% block body %}
+{% set selectedWebsite = app.session.get(constant('App\\Enum\\SessionKeys::SELECTED_SITE')) %}
 
+
+{% set user_id = getUserId() %}
+
+{% block body %}
     <div class="card">
         <div class="container-fluid">
             <div class="row justify-content-center">
@@ -125,6 +128,7 @@
                 sidePagination: "server",
                 loadingFontSize: '14px',
                 visibleSearch: true,
+              {% if selectedWebsite != 'all' and selectedWebsite != 0 %}
                 buttons: {
                     btnAddUser: {
                         text: 'Add prospect',
@@ -132,6 +136,8 @@
                         html: '<a href="{{ path('app_prospects_add') }}" class="btn btn-success ml-2"><i class="fa  fa-user-plus" aria-hidden="true"></i> Add Prospect</a>'
                     }
                 },
+             {% endif %}
+                
                 buttonsClass: '',
                 pageSize: 10,
                 pageList:[10, 25, 50, 100],
