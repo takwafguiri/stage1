@@ -75,23 +75,27 @@ class PageType extends AbstractType
             ])
             ->add('firstContent', TextareaType::class, [
                 'label' => 'First Content',
-                'attr' => ['class' => 'form-control ckeditor'],
+                'attr' => ['class' => 'form-control'],
                 'label_html' => true,
+                'required' => false
             ])
             ->add('secondContent', TextareaType::class, [
                 'label' => 'Second Content',
-                'attr' => ['class' => 'form-control ckeditor'],
+                'attr' => ['class' => 'form-control'],
                 'label_html' => true,
+                'required' => false
             ])
             ->add('thirdContent', TextareaType::class, [
                 'label' => 'Third Content',
-                'attr' => ['class' => 'form-control ckeditor'],
+                'attr' => ['class' => 'form-control'],
                 'label_html' => true,
+                'required' => false
             ])
             ->add('rightContent', TextareaType::class, [
                 'label' => 'Right Content',
-                'attr' => ['class' => 'form-control ckeditor'],
+                'attr' => ['class' => 'form-control'],
                 'label_html' => true,
+                'required' => false
             ])
 
             ->add('metaTitle', TextType::class, [

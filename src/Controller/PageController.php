@@ -116,7 +116,9 @@ class PageController extends AbstractController
                 }
                 $this->pageRepository->save($page);
                 $this->addFlash('success', $successMessage);
-                return $this->redirectToRoute('app_page_list');
+                if($isNew) {
+                    return $this->redirectToRoute('app_page_list');
+                }
             } else {
                 $this->addFlash('error', 'Please validate all fields');
             }

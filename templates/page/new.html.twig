@@ -155,6 +155,49 @@
 {% block javascript %}
 
 <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+<script src="{{ asset("template/js/tinymce/tinymce.min.js") }}"></script>
+    <script>
+        tinymce.init({
+            selector: '#{{ form.rightContent.vars.id }}',
+            plugins: [
+                "advlist", "anchor", "autolink", "charmap", "code", "fullscreen",
+                "help", "image", "insertdatetime", "link", "lists", "media",
+                "preview", "searchreplace", "table", "visualblocks", "accordion", "textcolor"
+            ],
+            height: 600,
+            toolbar: "undo redo formatselect fontselect fontsizeselect bold italic underline strikethrough forecolor backcolor alignleft aligncenter alignright alignjustify bullist numlist outdent indent removeformat link image media code fullscreen insertdatetime charmap hr anchor pagebreak table tabledelete tableprops tablerowprops tablecellprops tableinsertrowbefore tableinsertrowafter tabledeleterow tableinsertcolbefore tableinsertcolafter tabledeletecol emoticons print preview help",
+        });
+        tinymce.init({
+            selector: '#{{ form.firstContent.vars.id }}',
+            plugins: [
+                "advlist", "anchor", "autolink", "charmap", "code", "fullscreen",
+                "help", "image", "insertdatetime", "link", "lists", "media",
+                "preview", "searchreplace", "table", "visualblocks", "accordion", "textcolor"
+            ],
+            height: 600,
+            toolbar: "undo redo formatselect fontselect fontsizeselect bold italic underline strikethrough forecolor backcolor alignleft aligncenter alignright alignjustify bullist numlist outdent indent removeformat link image media code fullscreen insertdatetime charmap hr anchor pagebreak table tabledelete tableprops tablerowprops tablecellprops tableinsertrowbefore tableinsertrowafter tabledeleterow tableinsertcolbefore tableinsertcolafter tabledeletecol emoticons print preview ",
+        });
+        tinymce.init({
+            selector: '#{{ form.secondContent.vars.id }}',
+            plugins: [
+                "advlist", "anchor", "autolink", "charmap", "code", "fullscreen",
+                "help", "image", "insertdatetime", "link", "lists", "media",
+                "preview", "searchreplace", "table", "visualblocks", "accordion"
+            ],
+            height: 600,
+            toolbar: "undo redo formatselect fontselect fontsizeselect bold italic underline strikethrough forecolor backcolor alignleft aligncenter alignright alignjustify bullist numlist outdent indent removeformat link image media code fullscreen insertdatetime charmap hr anchor pagebreak table tabledelete tableprops tablerowprops tablecellprops tableinsertrowbefore tableinsertrowafter tabledeleterow tableinsertcolbefore tableinsertcolafter tabledeletecol emoticons print preview",
+        });
+        tinymce.init({
+            selector: '#{{ form.thirdContent.vars.id }}',
+            plugins: [
+                "advlist", "anchor", "autolink", "charmap", "code", "fullscreen",
+                "help", "image", "insertdatetime", "link", "lists", "media",
+                "preview", "searchreplace", "table", "visualblocks", "accordion"
+            ],
+            height: 600,
+            toolbar: "undo redo formatselect fontselect fontsizeselect bold italic underline strikethrough forecolor backcolor alignleft aligncenter alignright alignjustify bullist numlist outdent indent removeformat link image media code fullscreen insertdatetime charmap hr anchor pagebreak table tabledelete tableprops tablerowprops tablecellprops tableinsertrowbefore tableinsertrowafter tabledeleterow tableinsertcolbefore tableinsertcolafter tabledeletecol emoticons print preview",
+        });
+    </script>
 
 <script>
     $(document).ready(function() {
