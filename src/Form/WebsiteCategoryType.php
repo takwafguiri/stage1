@@ -88,14 +88,16 @@ class WebsiteCategoryType extends AbstractType
                 'attr' => [
                     'class' => 'form-check-input'
                 ],
-            ])->add('isServiceParent', CheckboxType::class, [
-                'label' => 'Is a parent service',
+            ])
+            ->add('useInDevisForm', CheckboxType::class, [
+                'label' => 'Use in devis form',
                 'required' => false,
                 'label_html'  => true,
                 'attr' => [
                     'class' => 'form-check-input'
                 ],
-            ]);
+            ])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

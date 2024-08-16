@@ -90,6 +90,14 @@ class ServiceType extends AbstractType
                     ])
                 ]
             ])
+            ->add('useInDevisForm', CheckboxType::class, [
+                'label' => 'Use in devis form',
+                'required' => false,
+                'label_html'  => true,
+                'attr' => [
+                    'class' => 'form-check-input'
+                ],
+            ])
             ->add('isEnabled', CheckboxType::class, [
                 'label' => 'Service enabled',
                 'required' => false,
