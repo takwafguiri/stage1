@@ -1,6 +1,61 @@
 {% extends 'layout/base.html.twig' %}
 {% import 'layout/macros/form_render.html.twig' as custom_form_render %}
 
+{% block stylesheets %}
+    <style>
+        .card {
+            min-height: 100%;
+        }
+        .folder-container {
+            min-height: 50vh;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .folder-navigation {
+            border-right: 1px solid #ddd;
+            background-color: #f8f9fa; /* Light grey background for tabs */
+            padding: 0;
+        }
+
+        .folder-tabs {
+            border-right: 1px solid #ddd;
+            background-color: #f8f9fa; /* Light grey background for tabs */
+            padding: 0;
+        }
+
+        .folder-tabs .nav-link {
+            border-radius: 0; /* Remove rounded corners from buttons */
+            text-align: left; /* Align text to the left */
+        }
+
+        .folder-content {
+            padding: 15px;
+            background-color: #fff;
+            min-height: 200px; /* Adjust as needed */
+        }
+
+        .folder-container .nav-pills .nav-link {
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 0; /* Ensure there's no gap between tabs */
+        }
+        #v-pills-tab {
+            padding-top: 30%;
+        }
+
+        .folder-container .nav-pills .nav-link.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .folder-container .nav-pills .nav-link:not(.active):hover {
+            background-color: #e9ecef; /* Lighten the hover effect */
+        }
+
+    </style>
+{% endblock %}
+
 {% block body %}
 <div class="card">
     <div class="container-fluid">
@@ -20,66 +75,98 @@
                 <hr/>
                 <div class="card-body">
                     <div class="row">
-                        <ul class="col-md-3 col-sm-3">
-                            <p class="text-info h4">Information générale du prospect</p>
-                            <li class="col-12 mt-3">
-                                First name: {{ prospect.firstName }}
-                            </li>
-                            <li class="col-12 mt-3">
-                                Last name: {{ prospect.LastName }}
-                            </li>
-                            <li class="col-12 mt-3">
-                                Birthdate: {{ prospect.birthday|date('d-m-Y') }}
-                            </li>
-                            <li class="col-12 mt-3">
-                                Email: {{ prospect.email }}
-                            </li>
-                            <li class="col-12 mt-3">
-                                Phone number: {{ prospect.phoneNumber }}
-                            </li>
-                            <li class="col-12 mt-3">
-                                Source: {{ prospect.website.name }}
-                            </li>
-                            <li class="col-12 mt-3">
-                                Country: {{ prospect.country }}
-                            </li>
-                            <li class="col-12 mt-3">
-                                City: {{ prospect.city }}
-                            </li>
-                            <li class="col-12 mt-3">
-                                Host: {{ prospect.host }}
-                            </li>
-                            <li class="col-12 mt-3">
-                                Category selected: {{ prospect.category.label }}
-                            </li>
-                            <li class="col-12 mt-3">
-                                Services selected:
+                        <p class="text-info h4">Information générale du prospect</p>
+                        <div class="row ml-md-2 ">
+                            <span class="col-2 col-xs-6">
+                                <b>First name: </b>{{ prospect.firstName }}
+                            </span>
+                            <span class="col-2 col-xs-6">
+                                <b>Last name: </b>{{ prospect.LastName }}
+                            </span>
+                            <span class="col-2 col-xs-6">
+                                <b>Birthdate: </b> {{ prospect.birthday|date('d-m-Y') }}
+                            </span>
+                            <span class="col-2 col-xs-6">
+                                <b>Email: </b> {{ prospect.email }}
+                            </span>
+                        </div>
+                        <div class="row ml-md-2 mt-3">
+                            <span class="col-2 col-xs-6">
+                                <b>Phone number: </b> {{ prospect.phoneNumber }}
+                            </span>
+                            <span class="col-2 col-xs-6">
+                                <b>Country: </b> {{ prospect.country }}
+                            </span>
+                            <span class="col-2 col-xs-6">
+                                <b>City: </b> {{ prospect.city }}
+                            </span>
+                        </div>
+                        <div class="row ml-md-2 mt-3">
+                            <span class="col-2 col-xs-6">
+                                <b>Intervention type: </b> {{ prospect.category.label }}
+                            </span>
+                            <span class="col-2 col-xs-6">
+                                <b>Intervention: </b>
                                 {% for service in prospect.services %}
-                                    {{ service.label }}
+                                    <span>{{ service.label }}</span>
                                     {% if not loop.last %}, {% endif %}
                                 {% endfor %}
-                            </li>
-                            <li class="col-12 mt-3">
-                                Appointment date: {{ prospect.appointment|date('d-m-Y') }}
-                            </li>
-                            <li class="col-12 mt-3">
-                                Description: {{ prospect.description }}
-                            </li>
-                        </ul>
-                        <div class="col-md-9 col-sm-9">
-                            <div class="d-flex justify-content-start">
-                                <p class="text-info h4">Tableau de suivi du dossier</p>
-                                <button type="button" data-toggle="modal" data-target="#myModal"
-                                        class="btn btn-info ml-2"><i class="fa  fa-user-plus" aria-hidden="true"></i>Add
-                                    a note
-                                </button>
-                            </div>
-                            <table class="table table-xs" id="table">
-                                <thead class="table-primary"></thead>
-                            </table>
+                            </span>
+                            <span class="col-2 col-xs-6">
+                                <b>Host: </b> {{ prospect.host }}
+                            </span>
+                            <span class="col-2 col-xs-6">
+                                <b>Appointment date:</b> {{ prospect.appointment|date('d-m-Y') }}
+                            </span>
                         </div>
-                        <div id="note-modal">
-                            {{ render(path('app_notes_new',parameters = {prospect: prospect.id})) }}
+                        <div class="row ml-md-2 mt-3">
+                            <span class="col-12">
+                                <b>Description:</b> {{ prospect.description ?: '-' }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mt-4 folder-container">
+                        <div class="col-3 folder-navigation">
+                            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                <button class="nav-link active" id="v-pills-suivi-tab" data-toggle="pill" data-target="#v-pills-suivi" type="button" role="tab" aria-controls="v-pills-suivi" aria-selected="true">Suivi du dossier</button>
+                                <button class="nav-link" id="v-pills-medical-files-tab" data-toggle="pill" data-target="#v-pills-medical-files" type="button" role="tab" aria-controls="v-pills-medical-files" aria-selected="false">Dossier médical</button>
+                                <button class="nav-link" id="v-pills-client-files-tab" data-toggle="pill" data-target="#v-pills-client-files" type="button" role="tab" aria-controls="v-pills-client-files" aria-selected="false">Dossier Client</button>
+                            </div>
+                        </div>
+                        <div class="col-9 mt-md-3 folder-content">
+                            <div class="tab-content" id="v-pills-tabContent">
+                                <div class="tab-pane fade show active" id="v-pills-suivi" role="tabpanel" aria-labelledby="v-pills-suivi-tab">
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-start">
+                                            <p class="text-info h4">Tableau de suivi du dossier</p>
+                                            <button type="button" data-toggle="modal" data-target="#myModal"
+                                                    class="btn btn-info ml-2"><i class="fa  fa-user-plus" aria-hidden="true"></i>Add
+                                                a note
+                                            </button>
+                                        </div>
+                                        <table class="table table-xs" id="table">
+                                            <thead class="table-primary"></thead>
+                                        </table>
+                                    </div>
+                                    <div id="note-modal">
+                                        {{ render(path('app_notes_new',parameters = {prospect: prospect.id})) }}
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="v-pills-medical-files" role="tabpanel" aria-labelledby="v-pills-medical-files-tab">
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-start">
+                                            <p class="text-info h4">Dossier médical</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="v-pills-client-files" role="tabpanel" aria-labelledby="v-pills-client-files-tab">
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-start">
+                                            <p class="text-info h4">Dossier Client</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
