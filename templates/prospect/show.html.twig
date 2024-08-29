@@ -179,68 +179,83 @@
 
     <script>
         const columns = [
-        {
-            title: 'ID',
-            field: 't_id',
+            {
+                title: 'ID',
+                field: 't_id',
+                visible: false,
+                align: "center",
+                sortName: 't.id',
+                halign: "center"
+            },
+            {
+                title: 'Message',
+                field: 't_message',
+                sortable: true,
+                sortName: 't.message',
+                halign: "center",
+                align: "center"
+            },
+            {
+                title: 'Status',
+                field: 's_label',
+                sortable: true,
+                sortName: 's.label',
+                halign: "center",
+                align: 'center'
+            },
+            {
+                title: 'Created by',
+                field: 'u_username',
+                sortable: true,
+                sortName: 'u.username',
+                align: "center",
+                halign: "center",
+                formatter: function (value, row) {
+                return value
+            }
+            },
+            {
+                title: 'Created at',
+                field: 't_createdAt',
+                sortable: true,
+                sortName: 't.createdAt',
+                align: "center",
+                halign: "center",
+                formatter: function (value, row) {
+                if (value == undefined)
+                return "-";
+                var date = moment(value);
+                return date.format('DD-MMM-YYYY');
+            }
+            },
+            {
+                title: 'Last update',
+                field: 't_updatedAt',
+                sortable: true,
+                sortName: 't.updatedAt',
+                align: "center",
+                halign: "center",
+                formatter: function (value, row) {
+                    if (value == undefined)
+                    return "-";
+                    var date = moment(value);
+                    return date.format('DD-MMM-YYYY');
+                }
+            },
+            {
+                title: 'Action',
+                sortable: false,
+                align: "center",
+                halign: "center",
+                formatter: function (data, row, index) {
+                    let ch = '<button type="button" id="edit-button" data-note='+ data +' class="btn btn-primary btn-sm" ><i class="fa fa-pencil" aria-hidden="true"></i>edit</button>';
+                    return ch;
+            }
+            },{
+            title: 'color',
             visible: false,
-            align: "center",
-            sortName: 't.id',
-            halign: "center"
+            field: 's_colorCode',
         },
-        {
-            title: 'Message',
-            field: 't_message',
-            sortable: true,
-            sortName: 't.message',
-            halign: "center",
-            align: "center"
-        },
-        {
-            title: 'Status',
-            field: 's_label',
-            sortable: true,
-            sortName: 's.label',
-            halign: "center",
-            align: 'center'
-        },
-        {
-            title: 'Created at',
-            field: 't_createdAt',
-            sortable: true,
-            sortName: 't.createdAt',
-            align: "center",
-            halign: "center",
-            formatter: function (value, row) {
-            if (value == undefined)
-            return "-";
-            var date = moment(value);
-            return date.format('DD-MMM-YYYY');
-        }},
-        {
-            title: 'Created by',
-            field: 'u_username',
-            sortable: true,
-            sortName: 'u.username',
-            align: "center",
-            halign: "center",
-            formatter: function (value, row) {
-            return value
-        }
-        },
-        {
-            title: 'Action',
-            sortable: false,
-            align: "center",
-            halign: "center",
-            formatter: function (data, row, index) {
-            let ch = '<button type="button" id="edit-button" data-note='+ data +' class="btn btn-primary btn-sm" ><i class="fa fa-pencil" aria-hidden="true"></i>edit</button>';
-            return ch;
-        }
-        },{
-        title: 'color',
-        visible: false,
-        field: 's_colorCode',
-    },
 
         ];
 
@@ -248,59 +263,59 @@
         const $table = $('#table');
 
         $table.bootstrapTable({
-        toggle: "table",
-        url: Routing.generate('app_prospects_show',{prospect: {{ prospect.id }} }),
-        sidePagination: "server",
-        loadingFontSize: '14px',
-        visibleSearch: true,
-        buttonsClass: '',
-        pageSize: 10,
-        pageList:[10, 25, 50, 100],
-        pagination: true,
-        paginationSuccessivelySize: 3,
-        rowStyle: function (row) {
-            return {css:{ 'background-color' : row.s_colorCode}}
-        },
-        onClickRow:function (row, $element, field){
-            $.ajax({
-    type: 'POST',
-    url: Routing.generate('app_notes_edit',{note: row.t_id }),
-    dataType: 'html',
-    success: function (res) {
-        //Handle your JSON data to update the DOM
-  $("#note-modal").html(res);
-  $("#myModal").show();
-    }
-})
-        } ,
-        paginationPagesBySide: 3,
-        paginationUseIntermediate: true,
-        paginationLoop: false,
-        paginationNextText: 'Next >',
-        paginationPreText: '< Prev',
-        sortName: "t.id",
-        sortOrder: "desc",
-        toolbar: "#toolbar",
-        filterControl: "true",
-        queryParams: function queryParams(params) {
-        params.columns = columns;
-        params.condition = ["t.prospect = {{ prospect.id }}"]
-        params.join = [{
-        'type' : 'left',
-        'join' : 't.status',
-        'alias' : 's',
-        'condition' : ''
-        },{
-        'type' : 'left',
-        'join' : 't.user',
-        'alias' : 'u',
-        'condition' : ''
-        }]
-        return params
-    },
-        columns: columns,
-        join: ["status","user"]
-    })
+            toggle: "table",
+            url: Routing.generate('app_prospects_show',{prospect: {{ prospect.id }} }),
+            sidePagination: "server",
+            loadingFontSize: '14px',
+            visibleSearch: true,
+            buttonsClass: '',
+            pageSize: 10,
+            pageList:[10, 25, 50, 100],
+            pagination: true,
+            paginationSuccessivelySize: 3,
+            rowStyle: function (row) {
+                return {css:{ 'background-color' : row.s_colorCode}}
+            },
+            onClickRow:function (row, $element, field){
+                $.ajax({
+                    type: 'POST',
+                    url: Routing.generate('app_notes_edit',{note: row.t_id }),
+                    dataType: 'html',
+                    success: function (res) {
+                        //Handle your JSON data to update the DOM
+                        $("#note-modal").html(res);
+                        $("#myModal").show();
+                    }
+                })
+            } ,
+            paginationPagesBySide: 3,
+            paginationUseIntermediate: true,
+            paginationLoop: false,
+            paginationNextText: 'Next >',
+            paginationPreText: '< Prev',
+            sortName: "t.id",
+            sortOrder: "desc",
+            toolbar: "#toolbar",
+            filterControl: "true",
+            queryParams: function queryParams(params) {
+                params.columns = columns;
+                params.condition = ["t.prospect = {{ prospect.id }}"]
+                params.join = [{
+                'type' : 'left',
+                'join' : 't.status',
+                'alias' : 's',
+                'condition' : ''
+                },{
+                'type' : 'left',
+                'join' : 't.user',
+                'alias' : 'u',
+                'condition' : ''
+                }]
+                return params
+            },
+            columns: columns,
+            join: ["status","user"]
+        })
     });
     </script>
     {% endblock %}

@@ -19,11 +19,11 @@ class NoteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('message', TextType::class, [
+            ->add('message', TextareaType::class, [
                 'attr' => ['class' => 'form-control'],
                 'required' => true,
                 'label_html' => true,
-                'label_attr' => ['class' => 'form-label'],
+                'label_attr' => ['class' => "form-label"],
                 'label' => 'Message'
             ])
             ->add('status', EntityType::class, [
@@ -36,10 +36,10 @@ class NoteType extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'required' => true,
-                'label_html' => true,
+                'label_html' => false,
                 'label' => 'Status',
                 'attr' => [
-                    'class' => 'select2 form-control',
+                    'class' => 'select2 form-control col-12',
                     'placeholder' => 'select status'
                 ]]);
     }

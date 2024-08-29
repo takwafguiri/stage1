@@ -1,5 +1,12 @@
 {% import 'layout/macros/form_render.html.twig' as custom_form_render %}
 {% block body %}
+
+<style>
+    .select2.select2-container {
+        width: 100% !important;
+    }
+
+</style>
     <div class="modal" id="myModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -10,9 +17,15 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    {{ form_start(form, {'action': path('app_notes_new', { 'prospect': prospect.id })}) }}
-                    {{ custom_form_render.row_text(form.message, 'col-8 mt-3') }}
-                    {{ custom_form_render.row_text(form.status, 'col-8 mt-3') }}
+                    {{ form_start(form, {
+                        'action': isNew
+                        ? path('app_notes_new', { 'prospect': prospect.id })
+                        : path('app_notes_edit', { 'note': note.id })
+                    }) }}
+                    <div class="row">
+                        {{ custom_form_render.row_select(form.status, 'col-12 mt-3') }}
+                        {{ custom_form_render.row_text(form.message, 'col-12 mt-3') }}
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-success">

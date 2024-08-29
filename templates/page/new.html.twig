@@ -175,6 +175,42 @@
                 "preview", "searchreplace", "table", "visualblocks", "accordion", "textcolor"
             ],
             height: 600,
+            content_style: `
+                img {
+                  max-width: 100%;
+                  height: auto;
+                }
+                table {
+                  width: 100%;
+                  border-collapse: collapse;
+                }
+                @media only screen and (max-width: 600px) {
+                  table, thead, tbody, th, td, tr {
+                    display: block;
+                  }
+                  th, td {
+                    box-sizing: border-box;
+                    width: 100%;
+                  }
+                }
+                .responsive-embed {
+                  position: relative;
+                  padding-bottom: 56.25%; /* 16:9 ratio */
+                  height: 0;
+                  overflow: hidden;
+                  max-width: 100%;
+                  height: auto;
+                }
+                .responsive-embed iframe,
+                .responsive-embed object,
+                .responsive-embed embed {
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                }
+              `,
             toolbar: "undo redo formatselect fontselect fontsizeselect bold italic underline strikethrough forecolor backcolor alignleft aligncenter alignright alignjustify bullist numlist outdent indent removeformat link image media code fullscreen insertdatetime charmap hr anchor pagebreak table tabledelete tableprops tablerowprops tablecellprops tableinsertrowbefore tableinsertrowafter tabledeleterow tableinsertcolbefore tableinsertcolafter tabledeletecol emoticons print preview ",
         });
         tinymce.init({
