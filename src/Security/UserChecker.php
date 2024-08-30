@@ -12,14 +12,14 @@ class UserChecker implements UserCheckerInterface
 {
     public function checkPreAuth(UserInterface $user): void
     {
-        if (!$user instanceof AppUser) {
-            return;
-        }
-
-        if ($user->getIsDeleted() || !$user->getIsEnabled()) {
-            // the message passed to this exception is meant to be displayed to the user
-            throw new CustomUserMessageAccountStatusException('Your user account is disabled or deleted.');
-        }
+//        if (!$user instanceof AppUser) {
+//            return;
+//        }
+//
+//        if ($user->getIsDeleted() || !$user->getIsEnabled()) {
+//            // the message passed to this exception is meant to be displayed to the user
+//            throw new CustomUserMessageAccountStatusException('Your user account is disabled or deleted.');
+//        }
     }
 
     public function checkPostAuth(UserInterface $user)

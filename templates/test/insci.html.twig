@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Evacuation Sanitaire{% endblock %}
+
+{% block body %}
+    <!-- Start Appointment Section -->
+    <section class="cs_shape_wrap" id="appointment">
+        <div class="cs_shape_2">
+            <svg width="1089" height="1002" viewBox="0 0 1089 1002" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path opacity="0.2" d="M444.57 826.314C529.104 1065.89 739.237 1008.47 834.547 949.171C981.567 843.507 997.742 626.309 999.967 542.103C1001.75 474.739 1058.26 303.318 1086.29 226.028C1115.11 -40.9119 843.814 0.833657 795.515 6.26561C747.215 11.6976 593.662 71.4673 441.083 40.606C319.02 15.917 205.529 28.8791 164.042 38.4462C-13.0065 100.952 -2.22156 200.043 3.13034 242.954C8.48234 285.864 53.2821 366.319 234.465 453.073C379.411 522.475 435.469 730.386 444.57 826.314Z" fill="url(#paint0_linear_5_285)"/>
+                <defs>
+                    <linearGradient id="paint0_linear_5_285" x1="844.274" y1="950.214" x2="424.319" y2="-69.4782" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#86BBF1" offset="0"/>
+                        <stop offset="1" stop-color="#D2EAEF"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+        <div class="cs_height_190 cs_height_xl_145 cs_height_lg_105"></div>
+        <div class="container">
+            <div class="row align-items-center cs_gap_y_40">
+                <div class="col-lg-6">
+                    <div class="cs_section_heading cs_style_1">
+
+                        <div class="cs_height_5"></div>
+                        <h2 class="cs_section_title cs_fs_72 m-0">Demander Un Devis :</h2>
+                    </div>
+                    <div class="cs_height_72 cs_height_lg_50"></div>
+                    <form action="#" class="row">
+                        <div class="col-lg-6">
+                            <label class="cs_input_label cs_heading_color">Civilité</label>
+                            <select class="cs_form_field">
+                                <option value="mr">Mr</option>
+                                <option value="mme">Mme</option>
+                            </select>
+                            <div class="cs_height_42 cs_height_xl_25"></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="cs_input_label cs_heading_color">Nom</label>
+                            <input type="text" class="cs_form_field" placeholder="Nom">
+                            <div class="cs_height_42 cs_height_xl_25"></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="cs_input_label cs_heading_color">Prénom</label>
+                            <input type="text" class="cs_form_field" placeholder="Prénom">
+                            <div class="cs_height_42 cs_height_xl_25"></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="cs_input_label cs_heading_color">Date de Naissance</label>
+                            <input type="date" class="cs_form_field" placeholder="YYYY-MM-DD">
+                            <div class="cs_height_42 cs_height_xl_25"></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="cs_input_label cs_heading_color">Email</label>
+                            <input type="email" class="cs_form_field" placeholder="Email">
+                            <div class="cs_height_42 cs_height_xl_25"></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="cs_input_label cs_heading_color">Téléphone</label>
+                            <input type="text" class="cs_form_field" placeholder="Téléphone">
+                            <div class="cs_height_42 cs_height_xl_25"></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="cs_input_label cs_heading_color">Pays</label>
+                            <input type="text" class="cs_form_field" placeholder="Pays">
+                            <div class="cs_height_42 cs_height_xl_25"></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="cs_input_label cs_heading_color">Ville</label>
+                            <input type="text" class="cs_form_field" placeholder="Ville">
+                            <div class="cs_height_42 cs_height_xl_25"></div>
+                        </div>
+                        <div class="col-lg-12">
+                            <label class="cs_input_label cs_heading_color">Hébergement</label>
+                            <div class="cs_radio_group">
+                                <div class="cs_radio_wrap">
+                                    <input class="cs_radio_input" type="radio" name="hebergement" id="hotel" value="hotel">
+                                    <label class="cs_radio_label" for="hotel">Hotel</label>
+                                </div>
+                                <div class="cs_radio_wrap">
+                                    <input class="cs_radio_input" type="radio" name="hebergement" id="appartement" value="appartement">
+                                    <label class="cs_radio_label" for="appartement">Appartement</label>
+                                </div>
+                                <div class="cs_radio_wrap">
+                                    <input class="cs_radio_input" type="radio" name="hebergement" id="sans_hebergement" value="sans_hebergement">
+                                    <label class="cs_radio_label" for="sans_hebergement">Sans Hébergement</label>
+                                </div>
+                            </div>
+                            <div class="cs_height_42 cs_height_xl_25"></div>
+                        </div>
+                        <div class="col-lg-12">
+                            <label class="cs_input_label cs_heading_color">Type d'Intervention</label>
+                            <select class="cs_form_field">
+                                <option value="intervention_sthetique">Intervention Sthetique</option>
+                                <option value="intervention_medical">Intervention Medical</option>
+                            </select>
+                            <div class="cs_height_42 cs_height_xl_25"></div>
+                        </div>
+                        <div class="col-lg-12">
+                            <button class="cs_btn cs_style_1">
+                                <span>Demander devis</span>
+                                <i>
+                                    <img src="{{ asset('templatefront/assets/img/icons/arrow_white.svg') }}" alt="Icon">
+                                    <img src="{{ asset('templatefront/assets/img/icons/arrow_white.svg') }}" alt="Icon">
+                                </i>
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="col-lg-5 offset-lg-1 text-center">
+                    <img src="{{ asset('templatefront/assets/img/home_1/appointment.jpeg') }}" alt="Appointment" class="cs_radius_30">
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Appointment Section -->
+
+
+{% endblock %}

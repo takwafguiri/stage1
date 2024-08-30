@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Evacuation Sanitaire{% endblock %}
+
+{% block body %}
+
+    <!-- Start Blog Section -->
+<section>
+    <div class="cs_height_190 cs_height_xl_145 cs_height_lg_105"></div>
+    <div class="container">
+        <div class="cs_section_heading cs_style_1 text-center">
+            <h3 class="cs_section_subtitle text-uppercase cs_accent_color cs_semibold m-0 cs_accent_color cs_fs_32">BLOG POSTS</h3>
+            <div class="cs_height_5"></div>
+
+        </div>
+        <div class="cs_height_72 cs_height_lg_50"></div>
+        <div class="row gy-4">
+            <div class="col-lg-4">
+                <div class="cs_post cs_style_1">
+                    <a href="{{ path('article1') }}" class="cs_post_thumb cs_view_mouse"><img src="{{ asset('templatefront/assets/img/home_1/senior-woman-with-medical-problems.jpg') }}" alt="Post"></a>
+                    <div class="cs_post_info">
+                        <div>
+                            <div class="cs_post_meta">
+
+                            </div>
+                            <h2 class="cs_post_title cs_semibold cs_fs_32"><a href="{{ path('article1') }}">Les signes avant-coureurs des maladies cardiaques et quand consulter un cardiologue</a></h2>
+                        </div>
+                        <div class="cs_heading_color cs_medium"><a href="{{ path('article1') }}" class="cs_post_btn">Learn More</a></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="cs_post cs_style_1">
+                    <a href="{{ path('article2') }}" class="cs_post_thumb cs_view_mouse"><img src="{{ asset('templatefront/assets/img/home_1/male-student-practicing-medicine.jpg') }}" alt="Post"></a>
+                    <div class="cs_post_info">
+                        <div>
+                            <div class="cs_post_meta">
+
+                            </div>
+                            <h2 class="cs_post_title cs_semibold cs_fs_32"><a href="{{ path('article2') }}">Les avancées technologiques en cardiologie : Comment Elles Sauvent des Vies</a></h2>
+                        </div>
+                        <div class="cs_heading_color cs_medium"><a href="{{ path('article2') }}" class="cs_post_btn">Learn More</a></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="cs_post cs_style_1">
+                    <a href="{{ path('article3') }}" class="cs_post_thumb cs_view_mouse"><img src="{{ asset('templatefront/assets/img/home_1/doctor-tending-patient.jpg') }}" alt="Post"></a>
+                    <div class="cs_post_info">
+                        <div>
+                            <div class="cs_post_meta">
+
+                            </div>
+                            <h2 class="cs_post_title cs_semibold cs_fs_32"><a href="{{ path('article3') }}">L'Importance de la Prévention des Maladies Cardiaques: Conseils et Bonnes Pratiques</a></h2>
+                        </div>
+                        <div class="cs_heading_color cs_medium"><a href="{{ path('article3') }}" class="cs_post_btn">Learn More</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Blog Section -->
+{% endblock %}
